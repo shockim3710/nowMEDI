@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable/backgroud_rounding.xml" value="0.3165" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable/circle_progressbar.xml" value="0.13" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable/circular_progress_background.xml" value="0.18" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable/circular_progress_foreground.xml" value="0.18" />
@@ -13,12 +14,21 @@
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable/progressbar.xml" value="0.13" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/drawable/selection_bar_setting.xml" value="0.18" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/asdasd.xml" value="0.2689969604863222" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/dosage_detail.xml" value="0.25" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/dosage_detail_listview.xml" value="0.5536458333333333" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/dosage_detail_listview_item.xml" value="0.33" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/dosage_history.xml" value="0.31354166666666666" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/dosage_histroy_listview_item.xml" value="0.31354166666666666" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/medi_detail.xml" value="0.2689969604863222" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/medi_history.xml" value="0.2247191011235955" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/medi_histroy_listview_item.xml" value="0.2692502532928065" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/progressbar.xml" value="0.2689969604863222" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/protector.xml" value="0.33" />
         <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/protector_add.xml" value="0.33" />
-        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/protector_listview_item.xml" value="0.5" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/protector_listview_item.xml" value="0.33" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/protector_manage.xml" value="0.2689969604863222" />
+        <entry key="..\:/Users/Ott4NG/AndroidStudioProjects/nowMedioyh/app/src/main/res/layout/test.xml" value="0.31354166666666666" />
       </map>
     </option>
   </component>

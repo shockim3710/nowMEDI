@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NowMEDI">
         <activity
-            android:name=".MainActivity"
+            android:name=".dosage_history"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".medi_history"/>
         <activity android:name=".protector_manage"/>
-        <activity android:name=".protector_add"/>
+        <activity android:name=".protector_add"
+            android:parentActivityName=".protector_manage"></activity>
+
 
 
     </application>

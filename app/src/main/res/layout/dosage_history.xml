@@ -47,7 +47,8 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="542dp" />
+        android:layout_height="542dp"
+        android:id="@+id/dosage_history_listview"/>
 
 
     <FrameLayout

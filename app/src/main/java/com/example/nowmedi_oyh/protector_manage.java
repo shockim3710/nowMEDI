@@ -12,7 +12,7 @@ public class protector_manage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.protector);
+        setContentView(R.layout.protector_manage);
 
     }
 
@@ -21,5 +21,12 @@ public class protector_manage extends AppCompatActivity {
         startActivity(intent);
         protector_manage.this.finish();
     }
+
+    public void DosageHistoryClick(View view) {
+        Intent intent = new Intent(protector_manage.this, dosage_history.class);
+        startActivity(intent);
+        protector_manage.this.finish();
+    }
+
 
 }

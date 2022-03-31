@@ -10,8 +10,13 @@
 
     <string name="medi_name">당뇨병약</string>
 
+    <string name="morning_title">&#160;아침약</string>
+    <string name="lunch_title">&#160;점심약</string>
+    <string name="dinner_title">&#160;저녁약</string>
+
 
     <!-- 내가 추가한거 -->
+    <string name="add">추가</string>
     <string name="add_protector">보호자 추가</string>
     <string name="list_protector">등록된 보호자</string>
     <string name="name_protector">보호자 이름</string>
@@ -21,12 +26,29 @@
 
     <string name="take_medi">고혈압약</string>
 
+    <string name="history_date">&#160;&#160;2022-05-25</string>
+
+
     <string name="test_date1">2022-05-25</string>
     <string name="test_date2">2022-05-24</string>
     <string name="test_date3">2022-05-23</string>
 
     <string name="protector_name">홍길동</string>
     <string name="protector_phone">010 - 1234 - 1234</string>
+
+    <string name="medi_morning_histroy">오전 7시 15분</string>
+    <string name="medi_lunch_histroy">오후 12시 30분</string>
+    <string name="medi_dinner_histroy">X</string>
+
+    <string name="medi_check">복용</string>
+    <string name="medi_uncheck">미복용</string>
+
+
+
+
+
+
+
 
 
 

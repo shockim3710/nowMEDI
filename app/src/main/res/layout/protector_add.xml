@@ -27,14 +27,42 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:text="@string/cancel"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:onClick="cancle_click"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/menu3"
+                android:text="@string/add_protector"
                 android:textColor="@color/black"
                 android:textSize="22sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:text="@string/add"
+                android:textColor="@color/black"
+                android:textSize="20sp"/>
 
             <View
                 android:layout_width="0dp"
@@ -100,7 +128,8 @@
                 android:layout_weight="10"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="홍길동" />
+                android:hint="@string/protector_name"
+                android:id="@+id/protector_name" />
 
             <View
                 android:layout_width="0dp"
@@ -158,7 +187,8 @@
                 android:layout_weight="10"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="010-1234-1234" />
+                android:hint="@string/protector_phone"
+                android:id="@+id/protector_phone" />
 
             <View
                 android:layout_width="0dp"
@@ -215,7 +245,9 @@
                 android:layout_weight="10"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="OOO님께서 OO약을 복용하지 않았습니다!!" />
+                android:hint="OOO님께서 OO약을 복용하지 않았습니다!!"
+                android:id="@+id/protector_msg" />
+
 
             <View
                 android:layout_width="0dp"
@@ -229,64 +261,16 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/view13"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="bottom">
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:background="@drawable/title_bar"
-            android:contentDescription="@string/title_bar" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="2" />
-
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_gravity="bottom"
-                android:text="@string/cancel"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1" />
-
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_gravity="bottom"
-                android:text="@string/add_protector"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:layout_weight="1" />
-        </LinearLayout>
+            android:orientation="horizontal"/>
 
     </FrameLayout>
 
