@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">지금이약</string>
+
+    <string name="title_bar">타이틀 바</string>
+    <string name="medicine_icon"> 약 아이콘</string>
+
+    <string name="today_date">5월 25일</string>
+    <string name="dosage_list_title">&#160;복용 리스트</string>
+
+    <string name="morning_title">&#160;아침약</string>
+    <string name="lunch_title">&#160;점심약</string>
+    <string name="dinner_title">&#160;저녁약</string>
+
+    <string name="list_background">리스트 배경</string>
+    <string name="menu_bar">메뉴바</string>
+
+    <string name="menu1">복용 리스트</string>
+    <string name="menu2">복용 내역</string>
+    <string name="menu3">보호자 관리</string>
+
+    <string name="today_month">5월</string>
+
+    <string name="medi_name">당뇨병약</string>
+    <string name="medi_alarm">오전 10:00</string>
+
+    <string name="medi_alarm_detail">아침약, 오전 09:30\n점심약, 오후 01:00</string>
+    <string name="medi_date_detail">2022년 5월 25일 ~ 2022년 6월 2일</string>
+    <string name="medi_product_detail">다이아벡스정250mg</string>
+    <string name="medi_memo_detail">복용초기에 일시적으로 복부팽만, 소화불량, 방귀 증가, 설사 등의 증상이 나타날 수 있습니다. 시간이 지나면 점차 사라지고 식사직후에 복용하면 이런 증상을 줄일 수 있습니다. 복용 초기 금속성 입맛이 느껴질 수 있습니다.</string>
+
+    <string name="delete_button">삭제</string>
+    <string name="modify_button">수정</string>
+    <string name="alarm_main_title">약알람 추가</string>
+    <string name="medicine_name">약이름</string>
+    <string name="take_tiems">복용시간</string>
+    <string name="take_period">복용기간</string>
+    <string name="medicine_product_name">약제품명</string>
+    <string name="medicine_caution">주의사항</string>
+    <string name="save">저장</string>
+    <string name="cancle">취소</string>
+    <string name="hint_medicine_name">ex)혈압약</string>
+    <string name="hint_calendar_add">해당 화면을 클릭하세요</string>
+    <string name="ex_hour">5시</string>
+    <string name="ex_minute">42분</string>
+    <string name="ex_date">5월 15일</string>
+    <string name="ex_alram_notice">X번째 알림</string>
+    <string name="ex_alarm_memo">혈압약 드셔야할 시간입니다.</string>
+    <string name="ex_alram_date">5월 21일 수요일</string>
+    <string name="medicine_name_detail">약 제품명</string>
+    <string name="medi_morning">아침약</string>
+    <string name="medi_afternoon">점심약</string>
+    <string name="medi_night">저녁약</string>
+    <string name="ex_morning">오전</string>
+
+
+</resources>
