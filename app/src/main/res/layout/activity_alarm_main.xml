@@ -24,7 +24,7 @@
             android:background="#FFDEDE"
             android:contentDescription="@string/cancle"
             android:minHeight="48dp"
-            app:srcCompat="@android:drawable/ic_delete" />
+            app:srcCompat="@drawable/icon_x" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+
                 android:contentDescription="@string/medicine_icon"
                 app:srcCompat="@drawable/medicine" />
 
@@ -84,8 +85,8 @@
             android:id="@+id/input_alaram_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:autofillHints="medicine_name"
             android:ems="10"
             android:hint="@string/hint_medicine_name"
@@ -109,8 +110,10 @@
                 android:id="@+id/imageView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="10dp"
+
+
                 android:contentDescription="@drawable/alarm_icon"
                 app:srcCompat="@drawable/alarm_icon" />
 
@@ -146,11 +149,13 @@
             android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
                 android:id="@+id/rv_addtime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
+                android:background="@drawable/bottomline"
+                />
         </LinearLayout>
 
     </LinearLayout>
@@ -170,8 +175,8 @@
                 android:id="@+id/imageView14"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="7dp"
                 android:contentDescription="@drawable/calendar"
                 app:srcCompat="@drawable/calendar" />
 
@@ -185,25 +190,29 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/editTextTextPersonName7"
+        <TextView
+            android:id="@+id/tv_seted_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:autofillHints="date_peroid"
+
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bottomline"
+            android:clickable="true"
             android:ems="10"
+            android:gravity="start|fill"
             android:hint="@string/hint_calendar_add"
             android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:textColorHint="#757575" />
-
+            android:minHeight="40dp"
+            android:onClick="date_set"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -234,13 +243,15 @@
             android:id="@+id/editTextTextPersonName8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+
+
             android:autofillHints="medicine_name_detail"
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="@string/medi_product_detail"
+            android:hint="@string/medi_product_detail"
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
@@ -278,11 +289,12 @@
             android:id="@+id/editTextTextMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
             android:gravity="start|top"
             android:hint="@string/medi_memo_detail"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+
             android:inputType="textMultiLine"
             android:minHeight="48dp" />
 

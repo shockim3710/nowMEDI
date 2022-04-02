@@ -9,44 +9,43 @@
         android:id="@+id/tv_daytime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_weight="0.5"
+        android:layout_marginRight="10dp"
         android:text="@string/medi_morning"
         android:textColor="@color/black"
-        android:textSize="19sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_ampm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.2"
+        android:layout_marginRight="5dp"
         android:text="@string/ex_morning"
         android:textColor="@color/black"
-        android:textSize="19sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.2"
+        android:layout_marginRight="5dp"
         android:text="@string/ex_hour"
         android:textColor="@color/black"
-        android:textSize="19sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:text="@string/ex_minute"
         android:textColor="@color/black"
-        android:textSize="19sp" />
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/iv_minus"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="20dp"
         android:layout_weight="0"
         android:contentDescription="@drawable/minus_icon"
         app:srcCompat="@drawable/minus_icon" />
