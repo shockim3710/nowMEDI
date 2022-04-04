@@ -124,11 +124,19 @@
             android:layout_gravity="center"
             android:background="@drawable/list_background"
             android:contentDescription="@string/list_background" />
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
         <ListView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:id="@+id/morning_listview">
+            android:layout_gravity="center"
+            android:id="@+id/morning_listview"
+            android:dividerHeight="0px"
+            android:divider="#00000000"
+
+        >
         </ListView>
 
     </FrameLayout>
@@ -191,7 +199,10 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:id="@+id/lunch_listview">
+            android:layout_gravity="center"
+            android:id="@+id/lunch_listview"
+            android:dividerHeight="0px"
+            android:divider="#00000000">
         </ListView>
 
     </FrameLayout>
@@ -253,7 +264,10 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:id="@+id/dinner_listview">
+            android:layout_gravity="center"
+            android:id="@+id/dinner_listview"
+            android:dividerHeight="0px"
+            android:divider="#00000000">
         </ListView>
 
     </FrameLayout>

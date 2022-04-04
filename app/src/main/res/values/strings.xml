@@ -22,8 +22,11 @@
     <string name="medi_name">당뇨병약</string>
     <string name="medi_alarm">오전 10:00</string>
 
-    <string name="medi_alarm_detail">아침약, 오전 09:30\n점심약, 오후 01:00</string>
-    <string name="medi_date_detail">2022년 5월 25일 ~ 2022년 6월 2일</string>
+    <string name="medi_routine_detail">아침약</string>
+    <string name="medi_time_detail">오전 09:30</string>
+    <string name="medi_start_date_detail"> 2022.05.01 </string>
+    <string name="medi_date_detail">&#160;~&#160;</string>
+    <string name="medi_end_date_detail"> 2022.05.29 </string>
     <string name="medi_product_detail">다이아벡스정250mg</string>
     <string name="medi_memo_detail">복용초기에 일시적으로 복부팽만, 소화불량, 방귀 증가, 설사 등의 증상이 나타날 수 있습니다. 시간이 지나면 점차 사라지고 식사직후에 복용하면 이런 증상을 줄일 수 있습니다. 복용 초기 금속성 입맛이 느껴질 수 있습니다.</string>
 
