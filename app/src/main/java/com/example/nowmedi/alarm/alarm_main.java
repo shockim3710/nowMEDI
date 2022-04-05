@@ -5,7 +5,9 @@ import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.mainpage.DosageList;
@@ -31,10 +34,16 @@ import java.util.TimeZone;
 public class alarm_main extends AppCompatActivity {
     int Fullhour,hour,minute;
     String daytime,ampm;
+    Date date1,date2;
+    Calendar calendar1;
+    int count=0;
+
+    private ArrayList<Calendar> calendarArrayList;
     private ArrayList<AddTime> arraylist;
     private AddTimeAdapter addedTimeAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+    int index= 0;
 
 
 
@@ -46,8 +55,10 @@ public class alarm_main extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         arraylist = new ArrayList<>();
+        calendarArrayList = new ArrayList<>();
         addedTimeAdapter = new AddTimeAdapter(arraylist);
         recyclerView.setAdapter(addedTimeAdapter);
+        this.calendar1 = Calendar.getInstance();
 
     }
     public void TimeSetClick(View v){
@@ -70,6 +81,7 @@ public class alarm_main extends AppCompatActivity {
                 daytime = data.getStringExtra("하루");
                 hour = Fullhour;
 
+
                 if(Fullhour==12){
                     ampm="오후";
                 }
@@ -83,10 +95,18 @@ public class alarm_main extends AppCompatActivity {
                 }
 
 
-                AddTime addtime = new AddTime(R.drawable.minus_icon,String.valueOf(hour)+"시",String.valueOf(minute)+"분",daytime,ampm );
+
+                AddTime addtime = new AddTime(R.drawable.minus_icon,String.valueOf(hour)+"시",String.valueOf(minute)+"분",daytime,ampm,String.valueOf(Fullhour),String.valueOf(minute) );
                 arraylist.add(addtime);
                 addedTimeAdapter.notifyDataSetChanged();
+
+                Toast.makeText(this,  arraylist.get(arraylist.size()-1).getFullHour()+ "  "+ arraylist.get(arraylist.size()-1).getoriminute() , Toast.LENGTH_SHORT).show();
+
+
             }
+
+
+
         }
     }
 
@@ -106,21 +126,70 @@ public class alarm_main extends AppCompatActivity {
                     public void onPositiveButtonClick(Pair<Long, Long> selection) {
 
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-                        Date date1  = new Date();
-                        Date date2  = new Date();
+                        date1  = new Date();
+                        date2  = new Date();
 
                         date1.setTime(selection.first);
                         date2.setTime(selection.second);
 
-
                         String datestring1 = simpleDateFormat.format(date1);
                         String datestring2 = simpleDateFormat.format(date2);
-
 
                         tv_date.setText(datestring1 + "~" + datestring2);
                     }
                 });
     }
+    public void SetAlarm(View v){
+
+//        this.calendar1.setTime(date1);
+//        this.calendar1.set(Calendar.HOUR_OF_DAY, Fullhour);
+//        this.calendar1.set(Calendar.MINUTE, minute);
+//        this.calendar1.set(Calendar.SECOND, 0);
+
+        // Receiver 설정
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
+        String end = format1.format(date2);
+        intent.putExtra("end",end);
+
+
+        // 알람 설정
+//        final int id = (int) System.currentTimeMillis();
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, this.calendar1.getTimeInMillis(),pendingIntent);
+
+
+
+        for(int i =0; i<arraylist.size();i++) {
+            this.calendar1.setTime(date1);
+            Fullhour= Integer.parseInt(arraylist.get(arraylist.size()-1-i).getFullHour());
+            minute= Integer.parseInt(arraylist.get(arraylist.size()-1-i).getoriminute());
+            this.calendar1.set(Calendar.HOUR_OF_DAY, Fullhour);
+            this.calendar1.set(Calendar.MINUTE, minute);
+            this.calendar1.set(Calendar.SECOND, 0);
+            calendarArrayList.add(calendar1);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarArrayList.get(i).getTimeInMillis(),pendingIntent);
+
+
+
+        }
+
+
+
+
+
+        // Toast 보여주기 (알람 시간 표시)
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Toast.makeText(this, "Alarm : " + format.format(calendar1.getTime()), Toast.LENGTH_LONG).show();
+
+    }
+
 
 
 

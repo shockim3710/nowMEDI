@@ -43,7 +43,8 @@ public class AddTimeAdapter extends RecyclerView.Adapter<AddTimeAdapter.CustomVi
             public void onClick(View v) {
                 remove(holder.getAdapterPosition());
             }
-        });
+        })
+        ;
 
 
     }
@@ -56,6 +57,7 @@ public class AddTimeAdapter extends RecyclerView.Adapter<AddTimeAdapter.CustomVi
     public void remove(int position){
         try{
             arrayList.remove(position);
+
             notifyItemRemoved(position);
         }catch (IndexOutOfBoundsException ex){
             ex.printStackTrace();

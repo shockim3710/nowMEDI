@@ -44,7 +44,9 @@
             android:stateListAnimator="@null"
             android:text="@string/save"
             android:textColor="#C50E0E"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:onClick="SetAlarm"
+            />
 
 
     </LinearLayout>
