@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -32,13 +33,13 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:gravity="end"
-                android:src="@drawable/back_icon"
-                android:contentDescription="@drawable/back_icon"
-
-                android:onClick="BackClick"
                 android:clickable="true"
-                android:focusable="true" />
+                android:contentDescription="@drawable/back_icon"
+                android:focusable="true"
+
+                android:gravity="end"
+                android:onClick="BackClick"
+                android:src="@drawable/back_icon" />
 
             <View
                 android:layout_width="0dp"
@@ -53,7 +54,7 @@
                 android:gravity="center"
                 android:text="@string/medi_name"
                 android:textColor="@color/black"
-                android:textSize="22sp"/>
+                android:textSize="22sp" />
 
             <View
                 android:layout_width="0dp"

@@ -19,6 +19,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
         String td = format.format(today);
         String ed =intent.getStringExtra("end");
+        int id = intent.getIntExtra("id",0);
+
 
 
         try {
@@ -32,11 +34,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         int compare1 = today.compareTo(enddate);
 
 
-        Toast.makeText(context, "today"+ td +"\nendday"+ ed +"compare" +compare1, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "today"+ td +"\nendday"+ ed +"compare" +compare1+ "id"+id, Toast.LENGTH_LONG).show();
 
       if(compare1>0){
            return;
       }
+
 
 
 
