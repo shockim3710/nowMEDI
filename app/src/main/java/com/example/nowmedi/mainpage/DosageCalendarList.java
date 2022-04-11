@@ -15,7 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AddTime;
 import com.example.nowmedi.database.DBHelper;
+import com.example.nowmedi.protector.ProtectorManage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -164,12 +166,16 @@ public class DosageCalendarList extends AppCompatActivity {
     }
 
     public void AlarmAddClick(View view) {
-        Intent intent = new Intent(DosageCalendarList.this, MediDetail.class);
+        Intent intent = new Intent(DosageCalendarList.this, AddTime.class);
         startActivity(intent);
         DosageCalendarList.this.finish();
     }
 
-
+    public void ProtectorClick(View view) {
+        Intent intent = new Intent(DosageCalendarList.this, ProtectorManage.class);
+        startActivity(intent);
+        DosageCalendarList.this.finish();
+    }
 
 
 

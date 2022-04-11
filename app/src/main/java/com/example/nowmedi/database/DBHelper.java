@@ -28,6 +28,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "ALARM_TIME text);";
 
         db.execSQL(sql_MEDI_ALARM);
+
+        String sql_PROTECTOR = "CREATE TABLE if not exists PROTECTOR ("
+                + "_id integer primary key autoincrement,"
+                + "PROTECTOR_NAME text,"
+                + "PROTECTOR_PHONE_NUM text,"
+                + "PROTECTOR_MESSAGE text);";
+
+        db.execSQL(sql_PROTECTOR);
     }
 
     @Override
@@ -37,6 +45,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String sql_MEDI_ALARM = "DROP TABLE if exists MEDI_ALARM";
         db.execSQL(sql_MEDI_ALARM);
+
+        String sql_PROTECTOR = "DROP TABLE if exists PROTECTOR";
+        db.execSQL(sql_PROTECTOR);
 
         onCreate(db);
     }

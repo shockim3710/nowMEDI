@@ -151,7 +151,11 @@ public class MediDetail extends AppCompatActivity {
         MediDetail.this.finish();
     }
 
-
+    public void onBackPressed() {
+        Intent intent = new Intent(MediDetail.this, DosageList.class);
+        startActivity(intent);
+        MediDetail.this.finish();
+    }
 
 
 

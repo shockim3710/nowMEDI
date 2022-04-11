@@ -12,7 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
+import com.example.nowmedi.protector.ProtectorManage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -192,6 +194,10 @@ public class DosageList extends AppCompatActivity {
 
 
     public void AlarmAddClick(View view) {
+        Intent intent = new Intent(DosageList.this, AlarmMain.class);
+        startActivity(intent);
+        DosageList.this.finish();
+
         String name = "삭제할 약";
         String product = "테스트zzzz";
         String memo = "주의해야한다ㅋㅋㅋ";
@@ -200,6 +206,14 @@ public class DosageList extends AppCompatActivity {
 
         String routine = "아침약";
         String time = "09:00";
+
+        String name1 = "홍길동";
+        String num = "01011112222";
+        String msg = "약을 복용하지 않았습니다. 확인해주세요";
+
+//        db.execSQL("INSERT INTO PROTECTOR" +
+//                "(PROTECTOR_NAME, PROTECTOR_PHONE_NUM, PROTECTOR_MESSAGE) " +
+//                "VALUES ('" + name1 + "', '" + num + "', '" + msg + "');");
 
 //        db.execSQL("INSERT INTO MEDICINE" +
 //                "(MEDI_NAME, MEDI_PRODUCT, MEDI_MEMO, " +
@@ -210,8 +224,8 @@ public class DosageList extends AppCompatActivity {
 //        db.execSQL("INSERT INTO MEDI_ALARM" +
 //                "(ALARM_MEDI_NAME, ALARM_ROUTINE, ALARM_TIME) " +
 //                "VALUES ('" + name + "', '" + routine + "', '" + time + "');");
-
-        Toast.makeText(getApplicationContext(), "추가 성공", Toast.LENGTH_SHORT).show();
+//
+//        Toast.makeText(getApplicationContext(), "추가 성공", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -221,6 +235,13 @@ public class DosageList extends AppCompatActivity {
         startActivity(intent);
         DosageList.this.finish();
     }
+
+    public void ProtectorClick(View view) {
+        Intent intent = new Intent(DosageList.this, ProtectorManage.class);
+        startActivity(intent);
+        DosageList.this.finish();
+    }
+
 
 
     // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
@@ -246,12 +267,5 @@ public class DosageList extends AppCompatActivity {
         toast.cancel();
 
     }
-
-
-
-
-
-
-
 
 }

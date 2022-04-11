@@ -4,14 +4,23 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_nowmedi"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_nowmedi_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NowMEDI">
         <activity
+            android:name=".alarm.AddTimePop"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"
+            android:exported="false" />
+        <activity
+            android:name=".alarm.AlarmMain"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".intro.Intro"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +31,9 @@
         <activity android:name=".mainpage.DosageList"/>
         <activity android:name=".mainpage.DosageCalendarList"/>
         <activity android:name=".mainpage.MediDetail"/>
+
+        <activity android:name=".protector.ProtectorAdd"/>
+        <activity android:name=".protector.ProtectorManage"/>
     </application>
 
 </manifest>
