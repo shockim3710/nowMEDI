@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nowmedi">
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    package="com.example.nowmedi_oyh">
 
     <application
         android:allowBackup="true"
@@ -12,44 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NowMEDI">
         <activity
-            android:name=".alarm.AddTimePop"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"
+            android:name=".DosageDetailMain"
             android:exported="false" />
         <activity
-            android:name=".alarm.alarm_main"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <activity
-            android:name=".intro.Intro"
+            android:name=".DosageHistoryMain"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mainpage.DosageList" />
-        <activity android:name=".mainpage.DosageCalendarList" />
-        <activity android:name=".mainpage.MediDetail" />
-        <activity
-            android:name=".alarm.alram_go"
-            />
-
-        <receiver
-            android:name=".alarm.AlarmReceiver"
-            android:enabled="true"
-            android:exported="false"
-            />
-
-        <service
-            android:name=".alarm.AlarmService"
-            android:enabled="true"
-            />
-
-
-
     </application>
 
 </manifest>
