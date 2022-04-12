@@ -100,7 +100,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
+                android:layout_weight="14"
                 android:text="@string/name_protector"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -112,9 +112,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,7 +140,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="50dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -158,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
+                android:layout_weight="14"
                 android:text="@string/phone_protector"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -170,10 +167,6 @@
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/view11"
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -190,7 +183,8 @@
                 android:layout_height="60dp"
                 android:layout_weight="10"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="phone"
+                android:maxLength="13"
                 android:hint="@string/protector_phone"
                 android:id="@+id/protector_phone" />
 
@@ -202,7 +196,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="50dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -217,7 +211,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
+                android:layout_weight="14"
                 android:text="@string/msg_protector"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -229,9 +223,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
 
         <LinearLayout
             android:layout_width="match_parent"

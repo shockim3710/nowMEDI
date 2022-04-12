@@ -68,8 +68,9 @@ public class DosageListAdapter extends BaseAdapter {
                         MediDetail.class); // 다음넘어갈 화면
 
                 intent.putExtra("mediName", list.get(pos).getMedi_name());
-
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 v.getContext().startActivity(intent);
+
             }
         });
 

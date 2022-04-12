@@ -145,7 +145,7 @@
                     android:layout_weight="2" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="28dp"
                     android:layout_height="35dp"
                     android:contentDescription="@drawable/calendar"
                     android:gravity="start"

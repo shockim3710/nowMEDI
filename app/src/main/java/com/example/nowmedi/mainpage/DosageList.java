@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.nowmedi.R;
 import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
+import com.example.nowmedi.history.DosageHistoryMain;
 import com.example.nowmedi.protector.ProtectorManage;
 
 import java.text.ParseException;
@@ -198,18 +199,18 @@ public class DosageList extends AppCompatActivity {
         startActivity(intent);
         DosageList.this.finish();
 
-        String name = "삭제할 약";
-        String product = "테스트zzzz";
-        String memo = "주의해야한다ㅋㅋㅋ";
-        String startdate = "2022.04.01";
-        String enddate = "2022.09.09";
-
-        String routine = "아침약";
-        String time = "09:00";
-
-        String name1 = "홍길동";
-        String num = "01011112222";
-        String msg = "약을 복용하지 않았습니다. 확인해주세요";
+//        String name = "삭제할 약";
+//        String product = "테스트zzzz";
+//        String memo = "주의해야한다ㅋㅋㅋ";
+//        String startdate = "2022.04.01";
+//        String enddate = "2022.09.09";
+//
+//        String routine = "아침약";
+//        String time = "09:00";
+//
+//        String name1 = "홍길동";
+//        String num = "01011112222";
+//        String msg = "약을 복용하지 않았습니다. 확인해주세요";
 
 //        db.execSQL("INSERT INTO PROTECTOR" +
 //                "(PROTECTOR_NAME, PROTECTOR_PHONE_NUM, PROTECTOR_MESSAGE) " +
@@ -232,6 +233,12 @@ public class DosageList extends AppCompatActivity {
 
     public void CalendarClick(View view) {
         Intent intent = new Intent(DosageList.this, DosageCalendarList.class);
+        startActivity(intent);
+        DosageList.this.finish();
+    }
+
+    public void DosageHistoryClick(View view) {
+        Intent intent = new Intent(DosageList.this, DosageHistoryMain.class);
         startActivity(intent);
         DosageList.this.finish();
     }

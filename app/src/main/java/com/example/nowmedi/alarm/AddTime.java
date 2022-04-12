@@ -2,11 +2,13 @@ package com.example.nowmedi.alarm;
 
 public class AddTime {
 
+
     private int iv_minus;
     private String tv_hour;
     private String tv_minute;
     private String tv_daytime;
     private String ampm;
+
 
     public AddTime(int iv_minus, String tv_hour, String tv_minute, String tv_daytime, String ampm) {
         this.iv_minus = iv_minus;
@@ -14,6 +16,7 @@ public class AddTime {
         this.tv_minute = tv_minute;
         this.tv_daytime = tv_daytime;
         this.ampm = ampm;
+
     }
 
     public int getIv_minus() {
@@ -55,4 +58,7 @@ public class AddTime {
     public void setAmpm(String ampm) {
         this.ampm = ampm;
     }
+
+
+
 }

@@ -29,17 +29,17 @@
     <string name="medi_date_detail">&#160;~&#160;</string>
     <string name="medi_end_date_detail"> 2022.05.29 </string>
     <string name="medi_product_detail">다이아벡스정250mg</string>
-    <string name="medi_memo_detail">복용초기에 일시적으로 복부팽만, 소화불량, 방귀 증가, 설사 등의 증상이 나타날 수 있습니다. 시간이 지나면 점차 사라지고 식사직후에 복용하면 이런 증상을 줄일 수 있습니다. 복용 초기 금속성 입맛이 느껴질 수 있습니다.</string>
+    <string name="medi_memo_detail">일시적으로 소화불량, 설사 등의 증상</string>
 
     <string name="delete_button">삭제</string>
     <string name="modify_button">수정</string>
 
     <string name="alarm_main_title">약알람 추가</string>
-    <string name="medicine_name">약이름</string>
-    <string name="take_tiems">복용시간</string>
-    <string name="take_period">복용기간</string>
-    <string name="medicine_product_name">약제품명</string>
-    <string name="medicine_caution">주의사항</string>
+    <string name="medicine_name">약 이름</string>
+    <string name="take_tiems">복용 시간</string>
+    <string name="take_period">복용 기간</string>
+    <string name="medicine_product_name">약 제품명</string>
+    <string name="medicine_caution">주의 사항</string>
     <string name="save">저장</string>
     <string name="cancle">취소</string>
     <string name="hint_medicine_name">혈압약</string>
@@ -75,7 +75,7 @@
     <string name="test_date3">2022-05-23</string>
 
     <string name="protector_name">홍길동</string>
-    <string name="protector_phone">01012345678</string>
+    <string name="protector_phone">(-) 없이 입력</string>
 
     <string name="medi_morning_histroy">오전 7시 15분</string>
     <string name="medi_lunch_histroy">오후 12시 30분</string>
@@ -83,6 +83,13 @@
 
     <string name="medi_check">복용</string>
     <string name="medi_uncheck">미복용</string>
+
+    <string name="history_item_routine">오전</string>
+    <string name="history_item_hour">7시</string>
+    <string name="history_item_minute">30분</string>
+    <string name="history_bunmo">/200</string>
+    <string name="history_bunja">160</string>
+    <string name="history_percent">80%</string>
 
 
 

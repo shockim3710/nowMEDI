@@ -29,6 +29,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL(sql_MEDI_ALARM);
 
+        String sql_MEDI_HISTORY = "CREATE TABLE if not exists MEDI_HISTORY ("
+                + "_id integer primary key autoincrement,"
+                + "HISTORY_MEDI_NAME text,"
+                + "HISTORY_DATE text,"
+                + "HISTORY_TIME text,"
+                + "HISTORY_ROUTINE text);";
+
+        db.execSQL(sql_MEDI_HISTORY);
+
         String sql_PROTECTOR = "CREATE TABLE if not exists PROTECTOR ("
                 + "_id integer primary key autoincrement,"
                 + "PROTECTOR_NAME text,"
@@ -45,6 +54,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         String sql_MEDI_ALARM = "DROP TABLE if exists MEDI_ALARM";
         db.execSQL(sql_MEDI_ALARM);
+
+        String sql_MEDI_HISTORY = "DROP TABLE if exists MEDI_HISTORY";
+        db.execSQL(sql_MEDI_HISTORY);
 
         String sql_PROTECTOR = "DROP TABLE if exists PROTECTOR";
         db.execSQL(sql_PROTECTOR);

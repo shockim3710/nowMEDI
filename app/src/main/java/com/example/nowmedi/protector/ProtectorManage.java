@@ -20,6 +20,7 @@ import com.example.nowmedi.R;
 import com.example.nowmedi.alarm.AddTime;
 import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
+import com.example.nowmedi.history.DosageHistoryMain;
 import com.example.nowmedi.mainpage.DosageCalendarList;
 import com.example.nowmedi.mainpage.DosageList;
 import com.example.nowmedi.mainpage.DosageListAdapter;
@@ -131,6 +132,9 @@ public class ProtectorManage extends AppCompatActivity {
     }
 
     public void DosageHistoryClick(View view) {
+        Intent intent = new Intent(ProtectorManage.this, DosageHistoryMain.class);
+        startActivity(intent);
+        ProtectorManage.this.finish();
     }
 
     public void DosageListClick(View view) {
