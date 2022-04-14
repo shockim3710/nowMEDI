@@ -4,7 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:clipToPadding="false">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 
     <ImageView
         android:id="@+id/iv_daytime_detail"
@@ -17,50 +26,54 @@
         app:srcCompat="@drawable/morning_medi"
         tools:ignore="ImageContrastCheck" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <TextView
         android:id="@+id/tv_daytime_detail"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="18sp"
-        android:layout_marginStart="50dp"
         android:textColor="@color/black"
-        android:layout_weight="1"
         android:text="@string/history_item_routine" />
 
     <TextView
         android:id="@+id/tv_hour_detail"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
         android:textSize="18sp"
-        android:layout_marginStart="10dp"
         android:textColor="@color/black"
-        android:layout_weight="1"
         android:text="@string/history_item_hour" />
 
     <TextView
         android:id="@+id/tv_minute_detail"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:gravity="center"
         android:textSize="18sp"
-        android:layout_marginStart="10dp"
         android:textColor="@color/black"
-        android:layout_weight="1"
         android:text="@string/history_item_minute" />
 
     <TextView
         android:id="@+id/tv_dosage_detail"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_weight="5"
-        android:layout_gravity="end"
-
-        android:layout_marginStart="30dp"
         android:gravity="center"
         android:text="@string/medi_check"
         android:textColor="@color/black"
         android:textSize="18sp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 
 </LinearLayout>

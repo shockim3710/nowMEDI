@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="30dp">
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:clipToPadding="false"
+    style="?android:attr/borderlessButtonStyle">
 
 
     <FrameLayout
@@ -24,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:background="#DDD8D8"
-                android:contentDescription="@string/title_bar" />
+                android:background="@drawable/list_background"
+                android:contentDescription="@string/title_bar"  />
 
         </androidx.cardview.widget.CardView>
 

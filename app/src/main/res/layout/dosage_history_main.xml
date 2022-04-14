@@ -81,7 +81,7 @@
             android:clickable="true"
             android:contentDescription="@drawable/add_medi_alarm_button"
             android:focusable="true"
-            android:onClick="Show_Dosage_detail"
+            android:onClick="AlarmAddClick"
             android:src="@drawable/add_medi_alarm_button" />
 
 
@@ -112,6 +112,7 @@
                     android:layout_height="55dp"
                     android:layout_weight="1"
                     android:drawableBottom="@drawable/unselection_bar"
+                    android:onClick="DosageListClick"
                     android:text="@string/menu1"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -132,7 +133,6 @@
                     android:clickable="true"
                     android:drawableBottom="@drawable/selection_bar_setting"
                     android:focusable="true"
-                    android:onClick="DosageHistoryClick"
                     android:text="@string/menu2"
                     android:textColor="@color/black"
                     android:textSize="20sp"

@@ -1,26 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nowmedi_oyh">
+    package="com.example.nowmedi">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_nowmedi"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_nowmedi_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NowMEDI">
         <activity
-            android:name=".DosageDetailMain"
+            android:name=".alarm.AddTimePop"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"
             android:exported="false" />
         <activity
-            android:name=".DosageHistoryMain"
+            android:name=".alarm.AlarmMain"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".intro.Intro"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".mainpage.DosageList"/>
+        <activity android:name=".mainpage.DosageCalendarList"/>
+        <activity android:name=".mainpage.MediDetail"/>
+
+        <activity android:name=".history.DosageDetailMain"/>
+        <activity android:name=".history.DosageHistoryMain"/>
+
+        <activity android:name=".protector.ProtectorAdd"/>
+        <activity android:name=".protector.ProtectorManage"/>
+
+        <activity
+            android:name=".alarm.AlarmGo"
+            />
+
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
+
+        <service
+            android:name=".alarm.AlarmService"
+            android:enabled="true"
+            />
+
     </application>
 
 </manifest>
