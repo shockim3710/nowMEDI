@@ -28,6 +28,17 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //테스트 코드
+//        int id = intent.getIntExtra("id",0);
+//        Calendar calendar =  Calendar.getInstance();
+//        calendar.add(Calendar.MINUTE,1);
+//        Toast.makeText(this, "서비스에서 받은 id 값은: "+ String.valueOf(id), Toast.LENGTH_LONG).show();
+//        Intent intent_daily_alarm = new Intent(this, AlarmReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent_daily_alarm, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
+
+
         // Foreground 에서 실행되면 Notification 을 보여줘야 됨
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Oreo(26) 버전 이후 버전부터는 channel 이 필요함

@@ -34,7 +34,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/today_date"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="22sp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/dosage_list_title"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="22sp"/>
 
             <View
@@ -342,7 +342,7 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="55dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:text="@string/menu1"
                     android:textSize="20sp"
                     android:drawableBottom="@drawable/selection_bar_setting"

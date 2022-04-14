@@ -54,7 +54,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/medi_name"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="22sp"/>
 
             <View

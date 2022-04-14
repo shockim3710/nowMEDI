@@ -60,11 +60,11 @@ public class ProtectorAdd extends AppCompatActivity {
 
 
         if(name.length()==0){
-            Toast.makeText(getApplicationContext(),"보호자 이름을 입력해주세요.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"보호자 이름을 입력하세요.",Toast.LENGTH_LONG).show();
         } else if(num.length()==0){
-            Toast.makeText(getApplicationContext(),"보호자 전화번호를 입력해주세요.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"보호자 전화번호를 입력하세요.",Toast.LENGTH_LONG).show();
         } else if(msg.length()==0){
-            Toast.makeText(getApplicationContext(),"전송 문자를 입력해주세요.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"전송 문자를 입력하세요.",Toast.LENGTH_LONG).show();
         } else{
 
             Cursor addPhone = database.rawQuery("SELECT PROTECTOR_PHONE_NUM FROM PROTECTOR " +

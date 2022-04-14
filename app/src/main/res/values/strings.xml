@@ -62,7 +62,7 @@
     <string name="list_protector">등록된 보호자</string>
     <string name="name_protector">보호자 이름</string>
     <string name="phone_protector">보호자 전화번호</string>
-    <string name="msg_protector">보호자 전송 문자</string>
+    <string name="msg_protector">전송 문자</string>
     <string name="cancel">취소</string>
 
     <string name="take_medi">고혈압약</string>
@@ -75,7 +75,7 @@
     <string name="test_date3">2022-05-23</string>
 
     <string name="protector_name">홍길동</string>
-    <string name="protector_phone">(-) 없이 입력</string>
+    <string name="protector_phone">(-) 없이 입력하세요</string>
 
     <string name="medi_morning_histroy">오전 7시 15분</string>
     <string name="medi_lunch_histroy">오후 12시 30분</string>
