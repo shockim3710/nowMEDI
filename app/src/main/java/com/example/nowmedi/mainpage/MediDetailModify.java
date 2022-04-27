@@ -1,4 +1,4 @@
-package com.example.nowmedi.alarm;
+package com.example.nowmedi.mainpage;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -18,12 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AddTime;
+import com.example.nowmedi.alarm.AddTimeAdapter;
+import com.example.nowmedi.alarm.AddTimePop;
+import com.example.nowmedi.alarm.AlarmReceiver;
 import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.history.DosageHistoryMain;
-import com.example.nowmedi.mainpage.DosageList;
-import com.example.nowmedi.mainpage.MediDetail;
-import com.example.nowmedi.protector.ProtectorAdd;
-import com.example.nowmedi.protector.ProtectorManage;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -32,10 +31,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
-public class AlarmMain extends AppCompatActivity {
+public class MediDetailModify extends AppCompatActivity {
+
     int Fullhour,hour,minute;
     String daytime,ampm;
     Date date1,date2;
@@ -59,9 +58,11 @@ public class AlarmMain extends AppCompatActivity {
     private DBHelper helper;
     private SQLiteDatabase db;
 
-    private EditText et_mediname;
     private EditText et_mediname_detail;
     private EditText et_caution;
+
+    private TextView mediName;
+    private String clickMediName;
 
     int index= 0;
     int medicine_db_lock=0,alarm_db_lock=0,alarm_lock=0;
@@ -69,12 +70,16 @@ public class AlarmMain extends AppCompatActivity {
     private ArrayList<String> dbAlarmTimeList;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_main);
+        setContentView(R.layout.medi_detail_modify);
 
-
+        //DB 생성
+        helper = new DBHelper(MediDetailModify.this, "newdb.db", null, 1);
+        db = helper.getWritableDatabase();
+        helper.onCreate(db);
 
 
         arraylist = new ArrayList<>();
@@ -93,18 +98,67 @@ public class AlarmMain extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(addedTimeAdapter);
 
-        //에디트 텍스트 초기화
-        et_mediname = findViewById(R.id.et_mediname);
+        mediName = (TextView) findViewById(R.id.medi_name_detail);
+
+        Intent intent = getIntent(); // 보내온 Intent를 얻는다
+        clickMediName = intent.getStringExtra("mediName");
+
+        mediName.setText(clickMediName);
+
+
+        //에디트 텍스트 정보 가져오기
+        EditText editText1 = (EditText) findViewById(R.id.et_mediname_detail);
+        EditText editText2 = (EditText) findViewById(R.id.et_caution);
+        TextView textView1 = (TextView) findViewById(R.id.tv_seted_date);
+
+        Cursor cursor1 = db.rawQuery("SELECT MEDI_PRODUCT, MEDI_MEMO, MEDI_START_DATE, MEDI_END_DATE FROM MEDICINE " +
+                "WHERE MEDI_NAME = '" + clickMediName + "' ", null);
+
+        Cursor cursor2 = db.rawQuery("SELECT ALARM_ROUTINE, ALARM_TIME FROM MEDI_ALARM " +
+                "WHERE ALARM_MEDI_NAME = '" + clickMediName + "' ", null);
+
+        while (cursor1.moveToNext()) {
+            editText1.setText(cursor1.getString(0));
+            editText2.setText(cursor1.getString(1));
+            textView1.setText(cursor1.getString(2) + "~" + cursor1.getString(3));
+        }
+
+        while (cursor2.moveToNext()) {
+            String routine = cursor2.getString(0);
+            String time = cursor2.getString(1);
+
+            int idx = time.indexOf(":");
+
+
+            Fullhour = Integer.parseInt(time.substring(0, idx));
+            minute = Integer.parseInt(time.substring(idx+1));
+            hour = Fullhour;
+
+            if(Fullhour==12){
+                ampm="오후";
+            }
+            else if(Fullhour>12){
+                hour%=12;
+                ampm="오후";
+            }
+            else{
+                ampm="오전";
+            }
+
+            AddTime addTime = new AddTime(R.drawable.minus_icon, String.valueOf(hour)+"시",
+                    String.valueOf(minute)+"분",routine,ampm);
+            arraylist.add(addTime);
+        }
+
+        addedTimeAdapter.notifyDataSetChanged();
+
+
         et_mediname_detail = findViewById(R.id.et_mediname_detail);
         et_caution = findViewById(R.id.et_caution);
 
-
-        //DB 생성
-        helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
-        db = helper.getWritableDatabase();
-        helper.onCreate(db);
-
     }
+
+
     public void TimeSetClick(View v){
         Intent intent = new Intent(this, AddTimePop.class);
         intent.putExtra("data", "Test Popup");
@@ -179,18 +233,11 @@ public class AlarmMain extends AppCompatActivity {
 
 
 
-
-
-
     public void SetAlarm(View v) throws ParseException {
         int is_empty=0;
         TextView tv_date = findViewById(R.id.tv_seted_date);
 
-
-        if(TextUtils.isEmpty(et_mediname.getText())){
-            Toast.makeText(this, "약 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
-        }
-        else if (arraylist.isEmpty()){
+        if (arraylist.isEmpty()){
             Toast.makeText(this, "복용 시간을 입력하세요.", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(tv_date.getText())){
@@ -207,8 +254,8 @@ public class AlarmMain extends AppCompatActivity {
         }
 
         if(is_empty==1){
-            MedicineDBAdd();
-            AlarmDBAdd();
+            MedicineDBModify();
+            AlarmDBModify();
 
 
             //        this.calendar1.setTime(date1);
@@ -220,10 +267,11 @@ public class AlarmMain extends AppCompatActivity {
             Intent intent = new Intent(this, AlarmReceiver.class);
             SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
 
-            Intent intent2 = new Intent(AlarmMain.this, DosageList.class);
+            Intent intent2 = new Intent(MediDetailModify.this, DosageList.class);
             startActivity(intent2);
-            AlarmMain.this.finish();
-            Toast.makeText(AlarmMain.this, "약 알람이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+            MediDetailModify.this.finish();
+            Toast.makeText(MediDetailModify.this, "약 알람이 수정되었습니다.", Toast.LENGTH_SHORT).show();
+
 
 
             // 알람 설정
@@ -239,7 +287,7 @@ public class AlarmMain extends AppCompatActivity {
 
 
             //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
-            helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
+            helper = new DBHelper(MediDetailModify.this, "newdb.db", null, 1);
             SQLiteDatabase database = helper.getReadableDatabase();
 
 
@@ -313,12 +361,12 @@ public class AlarmMain extends AppCompatActivity {
 
     }
 
-    public void MedicineDBAdd(){
+    public void MedicineDBModify(){
         String startdate,enddate;
         String mediname, product,caution;
 
 
-        mediname = et_mediname.getText().toString();
+//        mediname = et_mediname.getText().toString();
         product = et_mediname_detail.getText().toString();
         caution = et_caution.getText().toString();
         int count=0;
@@ -329,27 +377,24 @@ public class AlarmMain extends AppCompatActivity {
         //약이름, 제품명, 메모 저장
 
 //        Toast.makeText(this, "약이름은:"+mediname  +"\n약상세이름은:"+product +"\n주의사항은:"+ caution +
-//                "\n시작일은:"+startdate+"\n종료일은"+enddate, Toast.LENGTH_SHORT).show();
+////                "\n시작일은:"+startdate+"\n종료일은"+enddate, Toast.LENGTH_SHORT).show();
 
 
-        db.execSQL("INSERT INTO MEDICINE" +
-                "(MEDI_NAME, MEDI_PRODUCT, MEDI_MEMO, " +
-                "MEDI_START_DATE, MEDI_END_DATE) " +
-                "VALUES ('" + mediname + "', '" + product + "', '" + caution + "', " +
-                "'" + startdate + "', '" + enddate + "');");
-
-
-
+        db.execSQL("UPDATE MEDICINE SET MEDI_PRODUCT = '" + product + "'"+
+                ", MEDI_MEMO = '" + caution + "'"+
+                ", MEDI_START_DATE = '" + startdate + "'"+
+                ", MEDI_END_DATE = '" + enddate + "'"+
+                " WHERE MEDI_NAME = '" + clickMediName + "'");
     }
 
-    public void AlarmDBAdd(){
-        String mediname,ampm,hour,minute,routine,time;
-        int idx,int_hour,nullcheck=0;
+    public void AlarmDBModify() {
+        String mediname, ampm, hour, minute, routine, time;
+        int idx, int_hour, nullcheck = 0;
 //        for(int i=0;i<arraylist.size();i++){}
 
-        for(int i =0; i<arraylist.size();i++) {
+        for (int i = 0; i < arraylist.size(); i++) {
 
-            mediname = et_mediname.getText().toString();
+//            mediname = et_mediname.getText().toString();
             ampm = arraylist.get(i).getAmpm();
             hour = arraylist.get(i).getTv_hour();
             minute = arraylist.get(i).getTv_minute();
@@ -363,49 +408,48 @@ public class AlarmMain extends AppCompatActivity {
             if (ampm == "오후" && int_hour != 12) {
                 int_hour += 12;
                 hour = String.valueOf(int_hour);
-            }
-            else if(hour.length()<2){
-                hour= "0"+hour;
+            } else if (hour.length() < 2) {
+                hour = "0" + hour;
             }
 
             idx = minute.indexOf("분");
             minute = minute.substring(0, idx);
-            if(minute.length()<2){
-                minute= "0"+minute;
+            if (minute.length() < 2) {
+                minute = "0" + minute;
             }
 
 
             //hh:mm형식으로 만들기
             time = hour + ":" + minute;
-            System.out.println("약이름은:" + mediname + "  루틴은:" + routine + " 시간은"+time);
+//            System.out.println("약이름은:" + mediname + "  루틴은:" + routine + " 시간은" + time);
 
-            db.execSQL("INSERT INTO MEDI_ALARM" +
-                    "(ALARM_MEDI_NAME, ALARM_ROUTINE, ALARM_TIME) " +
-                    "VALUES ('" + mediname + "', '" + routine + "', '" + time + "');");
+            db.execSQL("UPDATE MEDI_ALARM SET ALARM_ROUTINE = '" + routine + "'"+
+                    ", ALARM_TIME = '" + time + "'"+
+                    " WHERE ALARM_MEDI_NAME = '" + clickMediName + "'");
 
 
         }
-
     }
 
-    public void Canclealarm(int id){
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-    }
+
+
+
 
     public void onBackPressed() {
-        Intent intent = new Intent(AlarmMain.this, DosageList.class);
+        Intent intent = new Intent(MediDetailModify.this, MediDetail.class);
+        intent.putExtra("mediName", clickMediName);
         startActivity(intent);
-        AlarmMain.this.finish();
+        MediDetailModify.this.finish();
+        overridePendingTransition(0, 0);
+
     }
 
     public void CancleClick(View view) {
-        Intent intent = new Intent(AlarmMain.this, DosageList.class);
+        Intent intent = new Intent(MediDetailModify.this, MediDetail.class);
+        intent.putExtra("mediName", clickMediName);
         startActivity(intent);
-        AlarmMain.this.finish();
+        MediDetailModify.this.finish();
+        overridePendingTransition(0, 0);
+
     }
-
-
 }

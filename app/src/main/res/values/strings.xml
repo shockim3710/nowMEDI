@@ -41,6 +41,7 @@
     <string name="medicine_product_name">약 제품명</string>
     <string name="medicine_caution">주의 사항</string>
     <string name="save">저장</string>
+    <string name="modify">수정</string>
     <string name="cancle">취소</string>
     <string name="hint_medicine_name">혈압약</string>
     <string name="hint_calendar_add">해당 화면을 클릭하세요</string>

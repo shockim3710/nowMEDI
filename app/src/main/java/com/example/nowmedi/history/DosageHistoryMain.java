@@ -171,12 +171,14 @@ public void display_data  (){
         Intent intent = new Intent(DosageHistoryMain.this, DosageList.class);
         startActivity(intent);
         DosageHistoryMain.this.finish();
+        overridePendingTransition(0, 0);
     }
 
     public void ProtectorClick(View view) {
         Intent intent = new Intent(DosageHistoryMain.this, ProtectorManage.class);
         startActivity(intent);
         DosageHistoryMain.this.finish();
+        overridePendingTransition(0, 0);
     }
 
 

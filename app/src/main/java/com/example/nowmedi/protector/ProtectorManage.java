@@ -135,12 +135,14 @@ public class ProtectorManage extends AppCompatActivity {
         Intent intent = new Intent(ProtectorManage.this, DosageHistoryMain.class);
         startActivity(intent);
         ProtectorManage.this.finish();
+        overridePendingTransition(0, 0);
     }
 
     public void DosageListClick(View view) {
         Intent intent = new Intent(ProtectorManage.this, DosageList.class);
         startActivity(intent);
         ProtectorManage.this.finish();
+        overridePendingTransition(0, 0);
     }
 
 

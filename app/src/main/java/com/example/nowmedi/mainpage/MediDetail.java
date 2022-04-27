@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
-
-import java.text.ParseException;
 
 public class MediDetail extends AppCompatActivity {
 
@@ -144,6 +140,13 @@ public class MediDetail extends AppCompatActivity {
     }
 
 
+    public void MediModifyClick(View view) {
+        Intent intent = new Intent(MediDetail.this, MediDetailModify.class);
+        intent.putExtra("mediName", clickMediName);
+        startActivity(intent);
+        MediDetail.this.finish();
+        overridePendingTransition(0, 0);
+    }
 
     public void BackClick(View view) {
         Intent intent = new Intent(MediDetail.this, DosageList.class);

@@ -235,18 +235,21 @@ public class DosageList extends AppCompatActivity {
         Intent intent = new Intent(DosageList.this, DosageCalendarList.class);
         startActivity(intent);
         DosageList.this.finish();
+        overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
     public void DosageHistoryClick(View view) {
         Intent intent = new Intent(DosageList.this, DosageHistoryMain.class);
         startActivity(intent);
         DosageList.this.finish();
+        overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
     public void ProtectorClick(View view) {
         Intent intent = new Intent(DosageList.this, ProtectorManage.class);
         startActivity(intent);
         DosageList.this.finish();
+        overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
 
