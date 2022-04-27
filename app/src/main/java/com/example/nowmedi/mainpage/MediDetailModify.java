@@ -63,6 +63,7 @@ public class MediDetailModify extends AppCompatActivity {
 
     private TextView mediName;
     private String clickMediName;
+    private TextView tv_seted_date;
 
     int index= 0;
     int medicine_db_lock=0,alarm_db_lock=0,alarm_lock=0;
@@ -148,6 +149,7 @@ public class MediDetailModify extends AppCompatActivity {
             AddTime addTime = new AddTime(R.drawable.minus_icon, String.valueOf(hour)+"시",
                     String.valueOf(minute)+"분",routine,ampm);
             arraylist.add(addTime);
+
         }
 
         addedTimeAdapter.notifyDataSetChanged();
@@ -155,6 +157,9 @@ public class MediDetailModify extends AppCompatActivity {
 
         et_mediname_detail = findViewById(R.id.et_mediname_detail);
         et_caution = findViewById(R.id.et_caution);
+        tv_seted_date = findViewById(R.id.tv_seted_date);
+
+
 
     }
 
@@ -267,11 +272,12 @@ public class MediDetailModify extends AppCompatActivity {
             Intent intent = new Intent(this, AlarmReceiver.class);
             SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
 
-            Intent intent2 = new Intent(MediDetailModify.this, DosageList.class);
+            Intent intent2 = new Intent(MediDetailModify.this, MediDetail.class);
+            intent2.putExtra("mediName", clickMediName);
             startActivity(intent2);
             MediDetailModify.this.finish();
             Toast.makeText(MediDetailModify.this, "약 알람이 수정되었습니다.", Toast.LENGTH_SHORT).show();
-
+            overridePendingTransition(0, 0);
 
 
             // 알람 설정
@@ -363,16 +369,24 @@ public class MediDetailModify extends AppCompatActivity {
 
     public void MedicineDBModify(){
         String startdate,enddate;
-        String mediname, product,caution;
+        String mediname, product,caution, date;
 
 
 //        mediname = et_mediname.getText().toString();
         product = et_mediname_detail.getText().toString();
         caution = et_caution.getText().toString();
+
+        date = tv_seted_date.getText().toString();
+
         int count=0;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        startdate=simpleDateFormat.format(date1);
-        enddate=simpleDateFormat.format(date2);
+//        startdate=simpleDateFormat.format(date1);
+//        enddate=simpleDateFormat.format(date2);
+        int idx = date.indexOf("~");
+
+
+        startdate = date.substring(0, idx);
+        enddate = date.substring(idx+1);
 
         //약이름, 제품명, 메모 저장
 
@@ -392,6 +406,11 @@ public class MediDetailModify extends AppCompatActivity {
         int idx, int_hour, nullcheck = 0;
 //        for(int i=0;i<arraylist.size();i++){}
 
+        String sql1 = "DELETE FROM MEDI_ALARM " +
+                "WHERE ALARM_MEDI_NAME = '" + clickMediName + "';";
+
+        db.execSQL(sql1);
+
         for (int i = 0; i < arraylist.size(); i++) {
 
 //            mediname = et_mediname.getText().toString();
@@ -399,6 +418,9 @@ public class MediDetailModify extends AppCompatActivity {
             hour = arraylist.get(i).getTv_hour();
             minute = arraylist.get(i).getTv_minute();
             routine = arraylist.get(i).getTv_daytime();
+
+            System.out.println("arraylist1111 = " + routine);
+
 
             // 시간 , 분 원래 값으로 복구하기
             idx = hour.indexOf("시");
@@ -423,9 +445,11 @@ public class MediDetailModify extends AppCompatActivity {
             time = hour + ":" + minute;
 //            System.out.println("약이름은:" + mediname + "  루틴은:" + routine + " 시간은" + time);
 
-            db.execSQL("UPDATE MEDI_ALARM SET ALARM_ROUTINE = '" + routine + "'"+
-                    ", ALARM_TIME = '" + time + "'"+
-                    " WHERE ALARM_MEDI_NAME = '" + clickMediName + "'");
+
+
+            db.execSQL("INSERT INTO MEDI_ALARM" +
+                    "(ALARM_MEDI_NAME, ALARM_ROUTINE, ALARM_TIME) " +
+                    "VALUES ('" + clickMediName + "', '" + routine + "', '" + time + "');");
 
 
         }
