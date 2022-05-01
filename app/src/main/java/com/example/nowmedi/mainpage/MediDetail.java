@@ -1,5 +1,7 @@
 package com.example.nowmedi.mainpage;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,9 +18,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AlarmMain;
+import com.example.nowmedi.alarm.AlarmReceiver;
 import com.example.nowmedi.database.DBHelper;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 public class MediDetail extends AppCompatActivity {
 
@@ -81,7 +87,7 @@ public class MediDetail extends AppCompatActivity {
 
         //리스트뷰의 어댑터 대상을 여태 설계한 adapter로 설정
         AlarmList.setAdapter(adapter);
-        setListViewHeightBasedOnChildren(AlarmList);
+//        setListViewHeightBasedOnChildren(AlarmList);
 
     }
 
@@ -118,7 +124,21 @@ public class MediDetail extends AppCompatActivity {
                         startActivity(intent);
                         MediDetail.this.finish();
 
+                        // 알람 취소
+                        SQLiteDatabase database = helper.getReadableDatabase();
+                        Cursor cursor = database.rawQuery("SELECT _id FROM MEDI_ALARM WHERE ALARM_MEDI_NAME ='"+ clickMediName+ "'" , null);
+                        for(int idx=0;idx<cursor.getCount();idx++){
+                            cursor.moveToNext();
+                            int id=cursor.getInt(0);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(MediDetail.this, id, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            alarmManager.cancel(pendingIntent);
+                        }
+                        db = helper.getWritableDatabase();
+
+
                         Toast.makeText(MediDetail.this, "약을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+
 
                         String sql1 = "DELETE FROM MEDICINE " +
                                       "WHERE MEDI_NAME = '" + clickMediName + "';";
@@ -161,29 +181,29 @@ public class MediDetail extends AppCompatActivity {
 
 
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-
-        int totalHeight = 0;
-        int dividerHeight = listView.getDividerHeight();
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
-
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            //listItem.measure(0, 0);
-            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += listItem.getMeasuredHeight() + dividerHeight;
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-
-        params.height = totalHeight;
-        listView.setLayoutParams(params);
-
-        listView.requestLayout();
-    }
+//    public static void setListViewHeightBasedOnChildren(ListView listView) {
+//        ListAdapter listAdapter = listView.getAdapter();
+//        if (listAdapter == null) {
+//            // pre-condition
+//            return;
+//        }
+//
+//        int totalHeight = 0;
+//        int dividerHeight = listView.getDividerHeight();
+//        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+//
+//        for (int i = 0; i < listAdapter.getCount(); i++) {
+//            View listItem = listAdapter.getView(i, null, listView);
+//            //listItem.measure(0, 0);
+//            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+//            totalHeight += listItem.getMeasuredHeight() + dividerHeight;
+//        }
+//        ViewGroup.LayoutParams params = listView.getLayoutParams();
+//
+//        params.height = totalHeight;
+//        listView.setLayoutParams(params);
+//
+//        listView.requestLayout();
+//    }
 
 }

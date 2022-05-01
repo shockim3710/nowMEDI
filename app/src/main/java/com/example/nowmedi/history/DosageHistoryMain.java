@@ -45,11 +45,10 @@ public class DosageHistoryMain extends AppCompatActivity {
         recyclerView.setAdapter(dosageHistoryAdapter);
         display_data();
 
-
     }
 
-//    public void dbtest(){
-//
+    public void testdb(){
+
 //        String name = "당뇨병약";
 //        String date = "2022.04.01";
 //        String time = "09:00";
@@ -123,9 +122,9 @@ public class DosageHistoryMain extends AppCompatActivity {
 //        );
 //
 //        display_data();
-//        dosageHistoryAdapter.notifyDataSetChanged();
-//
-//    }
+
+
+    }
 public void display_data  (){
     helper = new DBHelper(DosageHistoryMain.this, "newdb.db", null, 1);
         SQLiteDatabase database = helper.getReadableDatabase();
@@ -142,13 +141,13 @@ public void display_data  (){
                     "WHERE HISTORY_MEDI_NAME ='"+medi_name +"'and HISTORY_TIME IS NOT NULL) AS c", null);
             cursor2.moveToNext();
             int bunja = cursor2.getInt(0);
-            System.out.println("분자는?"+bunja);
+            //System.out.println("분자는?"+bunja);
 
             cursor2 = database.rawQuery("Select count(c.HISTORY_MEDI_NAME) FROM (SELECT * FROM MEDI_HISTORY "+
                     "WHERE HISTORY_MEDI_NAME ='"+ medi_name +"')AS c", null);
             cursor2.moveToNext();
             int bunmo = cursor2.getInt(0);
-            System.out.println("분모는?"+bunmo);
+            //System.out.println("분모는?"+bunmo);
 
             float percent = Math.round(((float) bunja/(float) bunmo) * 100.0f);
 
@@ -163,6 +162,7 @@ public void display_data  (){
     }
 
     public void AlarmAddClick(View view) {
+
         Intent intent = new Intent(DosageHistoryMain.this, AlarmMain.class);
         startActivity(intent);
         DosageHistoryMain.this.finish();

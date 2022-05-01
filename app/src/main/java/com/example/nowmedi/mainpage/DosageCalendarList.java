@@ -1,10 +1,13 @@
 package com.example.nowmedi.mainpage;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ListView;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.alarm.AddTime;
@@ -40,6 +45,9 @@ public class DosageCalendarList extends AppCompatActivity {
     SQLiteDatabase db;
     ListView calendarList;
     String clickDate = date;
+
+    static final int SMS_RECEIVE_PERMISSON=1;
+
 
 
 
@@ -85,6 +93,34 @@ public class DosageCalendarList extends AppCompatActivity {
         helper = new DBHelper(DosageCalendarList.this, "newdb.db", null, 1);
         db = helper.getWritableDatabase();
         helper.onCreate(db);
+
+
+
+
+
+
+
+
+
+        //권한이 부여되어 있는지 확인
+        int permissonCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
+        if(permissonCheck == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(getApplicationContext(), "SMS 수신권한 있음", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "SMS 수신권한 없음", Toast.LENGTH_SHORT).show();
+
+            //권한설정 dialog에서 거부를 누르면
+            //ActivityCompat.shouldShowRequestPermissionRationale 메소드의 반환값이 true가 된다.
+            //단, 사용자가 "Don't ask again"을 체크한 경우
+            //거부하더라도 false를 반환하여, 직접 사용자가 권한을 부여하지 않는 이상, 권한을 요청할 수 없게 된다.
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)){
+                //이곳에 권한이 왜 필요한지 설명하는 Toast나 dialog를 띄워준 후, 다시 권한을 요청한다.
+                Toast.makeText(getApplicationContext(), "SMS권한이 필요합니다", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.RECEIVE_SMS},       SMS_RECEIVE_PERMISSON);
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.RECEIVE_SMS}, SMS_RECEIVE_PERMISSON);
+            }
+        }
 
     }
 
@@ -168,6 +204,18 @@ public class DosageCalendarList extends AppCompatActivity {
     }
 
     public void AlarmAddClick(View view) {
+//        String phoneNo = "01056522544";
+//        String sms = "폰에서 자동으로 보내는 메시지 입니다.";
+//        try {
+//            SmsManager smsManager = SmsManager.getDefault();
+//            smsManager.sendTextMessage(phoneNo, null, sms, null, null);
+//            Toast.makeText(getApplicationContext(), "전송 완료!", Toast.LENGTH_LONG).show();
+//        } catch (Exception e) {
+//            Toast.makeText(getApplicationContext(), "전송 오류!", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();//오류 원인이 찍힌다.
+//            e.printStackTrace();
+//        }
+
         Intent intent = new Intent(DosageCalendarList.this, AlarmMain.class);
         startActivity(intent);
         DosageCalendarList.this.finish();

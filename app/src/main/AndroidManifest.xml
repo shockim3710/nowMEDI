@@ -3,6 +3,11 @@
     package="com.example.nowmedi">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    "<uses-permission android:name="android.permission.SEND_SMS" />"
+    "<uses-permission android:name="android.permission.RECEIVE_SMS" />"
+    "<uses-permission android:name="android.permission.READ_PHONE_STATE" />"
+
 
 
     <application
@@ -15,14 +20,17 @@
         <activity
             android:name=".alarm.AddTimePop"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".alarm.AlarmMain"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".intro.Intro"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,18 +40,26 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mainpage.DosageList"/>
-        <activity android:name=".mainpage.DosageCalendarList"/>
-        <activity android:name=".mainpage.MediDetail"/>
+        <activity android:name=".mainpage.DosageList"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".mainpage.DosageCalendarList"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".mainpage.MediDetail"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".history.DosageDetailMain"/>
-        <activity android:name=".history.DosageHistoryMain"/>
+        <activity android:name=".history.DosageDetailMain"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".history.DosageHistoryMain"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".protector.ProtectorAdd"/>
-        <activity android:name=".protector.ProtectorManage"/>
+        <activity android:name=".protector.ProtectorAdd"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".protector.ProtectorManage"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".alarm.AlarmGo"
+            android:screenOrientation="portrait"
             />
 
         <receiver
@@ -51,6 +67,15 @@
             android:enabled="true"
             android:exported="false"
             />
+        <receiver
+            android:name=".alarm.BootCompleteRecevier"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+        
 
         <service
             android:name=".alarm.AlarmService"

@@ -35,7 +35,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/menu2"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="22sp" />
 
             <View
@@ -134,7 +134,7 @@
                     android:drawableBottom="@drawable/selection_bar_setting"
                     android:focusable="true"
                     android:text="@string/menu2"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 

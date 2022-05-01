@@ -1,7 +1,6 @@
 package com.example.nowmedi.alarm;
 
-public class
-AddTime {
+public class AddTime {
 
 
     private int iv_minus;

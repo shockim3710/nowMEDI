@@ -99,7 +99,8 @@ public class DosageDetailMain extends AppCompatActivity {
         helper = new DBHelper(DosageDetailMain.this, "newdb.db", null, 1);
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.rawQuery("SELECT DISTINCT(HISTORY_DATE) FROM MEDI_HISTORY " +
-                "WHERE HISTORY_MEDI_NAME ='" + history_mediname+ "'", null);
+                "WHERE HISTORY_MEDI_NAME ='" + history_mediname+ "'" +
+                " ORDER BY HISTORY_DATE DESC", null);
 
         int recordCount = cursor.getCount();
         //System.out.println("날짜의 갯수는?"+String.valueOf(recordCount));
@@ -199,6 +200,7 @@ public class DosageDetailMain extends AppCompatActivity {
             DosageDetailSuper dosageDetailSuper = new DosageDetailSuper(history_date.get(i),arrayList_sub.get(i));
             arrayList_super.add(dosageDetailSuper);
             dosageDetailSuperAdapter.notifyDataSetChanged();
+
         }
 
     }

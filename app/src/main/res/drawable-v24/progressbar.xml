@@ -13,9 +13,9 @@
 
         <gradient
             android:angle="0"
-            android:endColor="@color/test"
-            android:centerColor="@color/test"
-            android:startColor="@color/test"
+            android:endColor="#25306C"
+            android:centerColor="#2196F3"
+            android:startColor="#01E2FF"
             android:type="sweep"
             android:useLevel="false"/>
 

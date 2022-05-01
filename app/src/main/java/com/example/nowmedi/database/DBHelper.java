@@ -17,7 +17,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "MEDI_PRODUCT text,"
                 + "MEDI_MEMO text,"
                 + "MEDI_START_DATE text,"
-                + "MEDI_END_DATE text);";
+                + "MEDI_END_DATE text);" +
+                "" +
+                "";
 
         db.execSQL(sql_MEDICINE);
 

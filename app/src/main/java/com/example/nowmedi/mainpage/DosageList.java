@@ -42,9 +42,9 @@ public class DosageList extends AppCompatActivity {
         TextView textView3 = (TextView) findViewById(R.id.today_date) ;
         textView3.setText(todayDate);
 
-        helper = new DBHelper(DosageList.this, "newdb.db", null, 1);
-        db = helper.getWritableDatabase();
-        helper.onCreate(db);
+//        helper = new DBHelper(DosageList.this, "newdb.db", null, 1);
+//        db = helper.getWritableDatabase();
+//        helper.onCreate(db);
 
 
         morningList = (ListView)findViewById(R.id.morning_listview);

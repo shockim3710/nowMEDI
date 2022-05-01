@@ -83,6 +83,7 @@ public class AddTimeAdapter extends RecyclerView.Adapter<AddTimeAdapter.CustomVi
             this.tv_minute=(TextView) itemView.findViewById(R.id.tv_minute);
             this.tv_daytime=(TextView) itemView.findViewById(R.id.tv_daytime);
             this.tv_ampm=(TextView) itemView.findViewById(R.id.tv_ampm);
+
         }
 
     }

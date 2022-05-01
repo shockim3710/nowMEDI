@@ -28,7 +28,7 @@ public class AddTimePop extends AppCompatActivity {
         ib_morning=(ImageButton)findViewById(R.id.ib_morning);
         ib_afternoon=(ImageButton)findViewById(R.id.ib_afternoon);
         ib_night=(ImageButton)findViewById(R.id.ib_night);
-        ib_morning.setBackgroundColor(Color.parseColor("#FFF48F8F"));
+        ib_morning.setBackgroundColor(Color.parseColor("#2C7ABD"));
 
 
         mTimePicker = (TimePicker) findViewById(R.id.timepicker);
@@ -56,29 +56,33 @@ public class AddTimePop extends AppCompatActivity {
     public void mOnMorning(View v){
         Daytime="아침약";
 
-        ib_morning.setBackgroundColor(Color.parseColor("#FFF48F8F"));
-        ib_afternoon.setBackgroundColor(Color.parseColor("#FFDEDE"));
-        ib_night.setBackgroundColor(Color.parseColor("#FFDEDE"));
+        ib_morning.setBackgroundColor(Color.parseColor("#2C7ABD"));
+        ib_afternoon.setBackgroundColor(Color.parseColor("#EDF4FC"));
+        ib_night.setBackgroundColor(Color.parseColor("#EDF4FC"));
 
     }
 
     public void mOnAfternoon(View v){
 
         Daytime="점심약";
-        ib_morning.setBackgroundColor(Color.parseColor("#FFDEDE"));
-        ib_afternoon.setBackgroundColor(Color.parseColor("#FFF48F8F"));
-        ib_night.setBackgroundColor(Color.parseColor("#FFDEDE"));
+        ib_morning.setBackgroundColor(Color.parseColor("#EDF4FC"));
+        ib_afternoon.setBackgroundColor(Color.parseColor("#2C7ABD"));
+        ib_night.setBackgroundColor(Color.parseColor("#EDF4FC"));
 
     }
 
     public void mOnNight(View v){
 
         Daytime="저녁약";
-        ib_morning.setBackgroundColor(Color.parseColor("#FFDEDE"));
-        ib_afternoon.setBackgroundColor(Color.parseColor("#FFDEDE"));
-        ib_night.setBackgroundColor(Color.parseColor("#FFF48F8F"));
+        ib_morning.setBackgroundColor(Color.parseColor("#EDF4FC"));
+        ib_afternoon.setBackgroundColor(Color.parseColor("#EDF4FC"));
+        ib_night.setBackgroundColor(Color.parseColor("#2C7ABD"));
 
     }
+
+
+
+
 
     //확인 버튼 클릭
     public void mOnClose(View v){
