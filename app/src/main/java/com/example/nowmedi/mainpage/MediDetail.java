@@ -1,5 +1,7 @@
 package com.example.nowmedi.mainpage;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -114,10 +116,24 @@ public class MediDetail extends AppCompatActivity {
                         startActivity(intent);
                         MediDetail.this.finish();
 
+                        // 알람 취소
+                        SQLiteDatabase database = helper.getReadableDatabase();
+                        Cursor cursor = database.rawQuery("SELECT _id FROM MEDI_ALARM WHERE ALARM_MEDI_NAME ='"+ clickMediName+ "'" , null);
+                        for(int idx=0;idx<cursor.getCount();idx++){
+                            cursor.moveToNext();
+                            int id=cursor.getInt(0);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(MediDetail.this, id, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            alarmManager.cancel(pendingIntent);
+                        }
+                        db = helper.getWritableDatabase();
+
+
                         Toast.makeText(MediDetail.this, "약을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
+
                         String sql1 = "DELETE FROM MEDICINE " +
-                                      "WHERE MEDI_NAME = '" + clickMediName + "';";
+                                "WHERE MEDI_NAME = '" + clickMediName + "';";
 
                         String sql2 = "DELETE FROM MEDI_ALARM " +
                                 "WHERE ALARM_MEDI_NAME = '" + clickMediName + "';";

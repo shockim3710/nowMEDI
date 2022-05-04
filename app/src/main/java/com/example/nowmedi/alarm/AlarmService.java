@@ -29,7 +29,8 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //테스트 코드
-//        int id = intent.getIntExtra("id",0);
+        int id = intent.getIntExtra("id",0);
+        int count = intent.getIntExtra("count",0);
 //        Calendar calendar =  Calendar.getInstance();
 //        calendar.add(Calendar.MINUTE,1);
 //        Toast.makeText(this, "서비스에서 받은 id 값은: "+ String.valueOf(id), Toast.LENGTH_LONG).show();
@@ -53,10 +54,13 @@ public class AlarmService extends Service {
             startForeground(1, notification);
         }
 
+
         // 알람창 호출
         Intent intent1 = new Intent(this, AlarmGo.class);
         // 새로운 TASK 를 생성해서 Activity 를 최상위로 올림
         intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent1.putExtra("id",id);
+        intent1.putExtra("count",count);
         startActivity(intent1);
 
         Log.d("AlarmService", "Alarm");

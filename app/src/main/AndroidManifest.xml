@@ -67,21 +67,14 @@
         <activity android:name=".mainpage.MediDetailModify"
             android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".alarm.AlarmGo"
-            android:screenOrientation="portrait"
-            />
-
         <receiver
-            android:name=".alarm.AlarmReceiver"
+            android:name=".alarm.BootCompleteRecevier"
             android:enabled="true"
-            android:exported="false"
-            />
-
-        <service
-            android:name=".alarm.AlarmService"
-            android:enabled="true"
-            />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
 
 
     </application>
