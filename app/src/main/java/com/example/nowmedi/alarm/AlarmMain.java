@@ -234,6 +234,11 @@ public class AlarmMain extends AppCompatActivity {
 //            helper.close();
 //            db.close();
 
+            Intent intent2 = new Intent(AlarmMain.this, DosageList.class);
+            startActivity(intent2);
+            AlarmMain.this.finish();
+            Toast.makeText(AlarmMain.this, "약 알람이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+
 
         }
     }
