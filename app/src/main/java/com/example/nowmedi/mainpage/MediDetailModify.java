@@ -292,7 +292,7 @@ public class MediDetailModify extends AppCompatActivity {
             is_empty=1;
         }
         if(is_empty==1){
-            deelte_leagcy_arlarm();
+            delete_leagcy_arlarm();
             MedicineDBModify();
             AlarmDBModify();
 
@@ -482,7 +482,8 @@ public class MediDetailModify extends AppCompatActivity {
                 calendarArrayList.add(calendar1);
 
 
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, IDList.get(i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, IDList.get(i), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+                );
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendarArrayList.get(i).getTimeInMillis(),pendingIntent);
 
@@ -724,7 +725,7 @@ public class MediDetailModify extends AppCompatActivity {
 
 
 
-    public void deelte_leagcy_arlarm(){
+    public void delete_leagcy_arlarm(){
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = database.rawQuery("SELECT _id FROM MEDI_ALARM WHERE ALARM_MEDI_NAME ='"+ clickMediName+ "'" , null);
         for(int idx=0;idx<cursor.getCount();idx++){
@@ -734,7 +735,7 @@ public class MediDetailModify extends AppCompatActivity {
             Intent myIntent = new Intent(getApplicationContext(),
                     AlarmReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             alarmManager.cancel(pendingIntent);
         }
     }

@@ -231,8 +231,8 @@ public class AlarmMain extends AppCompatActivity {
             MedicineDBAdd();
             AlarmDBAdd();
             //setall_arlam();
-//            helper.close();
-//            db.close();
+            helper.close();
+            db.close();
 
             Intent intent2 = new Intent(AlarmMain.this, DosageList.class);
             startActivity(intent2);
@@ -624,11 +624,12 @@ public class AlarmMain extends AppCompatActivity {
             Intent intent = new Intent(this, AlarmReceiver.class);
             intent.putExtra("id",id);
             intent.putExtra("count",count);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(),pendingIntent);
         }
-        Toast.makeText(this, "id="+id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "id="+id, Toast.LENGTH_SHORT).show();
 
     }
 

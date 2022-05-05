@@ -148,7 +148,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent repeat_intent = new Intent(context1, AlarmReceiver.class);
         repeat_intent.putExtra("id", id1);
         repeat_intent.putExtra("count",count);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context1, id1, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context1, id1, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context1, id1, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         AlarmManager alarmManager = (AlarmManager) context1.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 

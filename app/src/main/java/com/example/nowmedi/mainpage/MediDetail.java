@@ -128,7 +128,7 @@ public class MediDetail extends AppCompatActivity {
                             Intent myIntent = new Intent(getApplicationContext(),
                                     AlarmReceiver.class);
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                                    getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
 
                             alarmManager.cancel(pendingIntent);
                             System.out.println("삭제한약 id"+id);

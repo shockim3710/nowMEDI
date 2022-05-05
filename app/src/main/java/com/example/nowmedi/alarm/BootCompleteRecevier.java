@@ -25,7 +25,7 @@ public class BootCompleteRecevier extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             // Set the alarm here.
-            Toast.makeText(context, "테스트 테스트 테스트", Toast.LENGTH_SHORT).show();
+
 
             helper = new DBHelper(context, "newdb.db", null, 1);
             db = helper.getWritableDatabase();
@@ -99,6 +99,7 @@ public class BootCompleteRecevier extends BroadcastReceiver {
             helper.close();
             db.close();
 
+            Toast.makeText(context, "약알람 등록 완료", Toast.LENGTH_SHORT).show();
 
         }
     }
