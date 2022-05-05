@@ -11,16 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nowmedi.R;
-import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.mainpage.DosageList;
-import com.example.nowmedi.mainpage.MediDetail;
 
 import java.util.ArrayList;
 

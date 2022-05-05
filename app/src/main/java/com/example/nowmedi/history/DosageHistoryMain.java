@@ -47,7 +47,7 @@ public class DosageHistoryMain extends AppCompatActivity {
 
     }
 
-    public void testdb(){
+    public void Show_Dosage_detail(View v){
 
 //        String name = "당뇨병약";
 //        String date = "2022.04.01";
@@ -122,7 +122,7 @@ public class DosageHistoryMain extends AppCompatActivity {
 //        );
 //
 //        display_data();
-
+//        dosageHistoryAdapter.notifyDataSetChanged();
 
     }
 public void display_data  (){
@@ -141,13 +141,13 @@ public void display_data  (){
                     "WHERE HISTORY_MEDI_NAME ='"+medi_name +"'and HISTORY_TIME IS NOT NULL) AS c", null);
             cursor2.moveToNext();
             int bunja = cursor2.getInt(0);
-            //System.out.println("분자는?"+bunja);
+            System.out.println("분자는?"+bunja);
 
             cursor2 = database.rawQuery("Select count(c.HISTORY_MEDI_NAME) FROM (SELECT * FROM MEDI_HISTORY "+
                     "WHERE HISTORY_MEDI_NAME ='"+ medi_name +"')AS c", null);
             cursor2.moveToNext();
             int bunmo = cursor2.getInt(0);
-            //System.out.println("분모는?"+bunmo);
+            System.out.println("분모는?"+bunmo);
 
             float percent = Math.round(((float) bunja/(float) bunmo) * 100.0f);
 
@@ -162,7 +162,6 @@ public void display_data  (){
     }
 
     public void AlarmAddClick(View view) {
-
         Intent intent = new Intent(DosageHistoryMain.this, AlarmMain.class);
         startActivity(intent);
         DosageHistoryMain.this.finish();
@@ -172,12 +171,14 @@ public void display_data  (){
         Intent intent = new Intent(DosageHistoryMain.this, DosageList.class);
         startActivity(intent);
         DosageHistoryMain.this.finish();
+        overridePendingTransition(0, 0);
     }
 
     public void ProtectorClick(View view) {
         Intent intent = new Intent(DosageHistoryMain.this, ProtectorManage.class);
         startActivity(intent);
         DosageHistoryMain.this.finish();
+        overridePendingTransition(0, 0);
     }
 
 

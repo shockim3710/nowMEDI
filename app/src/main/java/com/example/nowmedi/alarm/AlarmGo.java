@@ -7,18 +7,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.history.DosageHistoryMain;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -30,6 +28,7 @@ public class AlarmGo extends AppCompatActivity{
     private DBHelper helper;
     private SQLiteDatabase db;
     private TextView tv_alarm_count,tv_alarm_message,tv_alarm_day,tv_alarm_ampm,tv_alarm_time;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +86,12 @@ public class AlarmGo extends AppCompatActivity{
 
 
     public void alarm_close(View v){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
+
         Add_Nextday_alarm();
 
         if (this.mediaPlayer.isPlaying()) {

@@ -2,6 +2,8 @@ package com.example.nowmedi.mainpage;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -9,18 +11,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.nowmedi.R;
-import com.example.nowmedi.alarm.AddTime;
 import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
 import com.example.nowmedi.history.DosageHistoryMain;
@@ -31,6 +35,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DosageCalendarList extends AppCompatActivity {
+
+    String inputPhoneNum;
+    ImageButton sendSMSBt;
+
+    // 문자
+    private final int MY_PERMISSION_REQUEST_SMS = 1001;
+
 
     private CalendarView calendarView;
 
@@ -46,15 +57,17 @@ public class DosageCalendarList extends AppCompatActivity {
     ListView calendarList;
     String clickDate = date;
 
-    static final int SMS_RECEIVE_PERMISSON=1;
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dosage_calendar_list);
+
+        // 문자
+        inputPhoneNum = "";
+        sendSMSBt = findViewById(R.id.send_sms_button);
+
+
+
         final TextView textView1 = findViewById(R.id.select_date);
 
         System.out.println("clickDate = " + clickDate);
@@ -102,27 +115,68 @@ public class DosageCalendarList extends AppCompatActivity {
 
 
 
-        //권한이 부여되어 있는지 확인
-        int permissonCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS);
-        if(permissonCheck == PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(getApplicationContext(), "SMS 수신권한 있음", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(), "SMS 수신권한 없음", Toast.LENGTH_SHORT).show();
+        //문자 권한이 부여되어 있는지 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+                // Android provides a utility method, shouldShowRequestPermissionRationale(), that returns true if the user has previously
+                // denied the request, and returns false if a user has denied a permission and selected the Don't ask again option in the
+                // permission request dialog, or if a device policy prohibits the permission. If a user keeps trying to use functionality that
+                // requires a permission, but keeps denying the permission request, that probably means the user doesn't understand why
+                // the app needs the permission to provide that functionality. In a situation like that, it's probably a good idea to show an
+                // explanation.
 
-            //권한설정 dialog에서 거부를 누르면
-            //ActivityCompat.shouldShowRequestPermissionRationale 메소드의 반환값이 true가 된다.
-            //단, 사용자가 "Don't ask again"을 체크한 경우
-            //거부하더라도 false를 반환하여, 직접 사용자가 권한을 부여하지 않는 이상, 권한을 요청할 수 없게 된다.
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)){
-                //이곳에 권한이 왜 필요한지 설명하는 Toast나 dialog를 띄워준 후, 다시 권한을 요청한다.
-                Toast.makeText(getApplicationContext(), "SMS권한이 필요합니다", Toast.LENGTH_SHORT).show();
-                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.RECEIVE_SMS},       SMS_RECEIVE_PERMISSON);
-            }else{
-                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.RECEIVE_SMS}, SMS_RECEIVE_PERMISSON);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("알림");
+                builder.setMessage("SMS 권한을 부여하지 않으면 이 앱이 제대로 작동하지 않습니다.");
+                builder.setIcon(android.R.drawable.ic_dialog_info);
+
+                builder.setNeutralButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(DosageCalendarList.this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SMS);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SMS);
             }
         }
 
+
+        // 문자 (나중에 클릭할때 약알람추가화면으로 변경해야함)
+        sendSMSBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                sendSMS(inputPhoneNum.toString(), "테스트 중입니다1");
+//                sendSMS(inputPhoneNum.toString(), "테스트 중입니다2");
+//                sendSMS(inputPhoneNum.toString(), "테스트 중입니다3");
+
+                Intent intent = new Intent(DosageCalendarList.this, AlarmMain.class);
+                startActivity(intent);
+                DosageCalendarList.this.finish();
+
+            }
+        });
+
     }
+
+
+
+    // 문자 발송기능
+    private void sendSMS(String phoneNumber, String message) {
+        PendingIntent pi = PendingIntent.getActivity(this, 0,
+                new Intent(this, DosageCalendarList.class), PendingIntent.FLAG_MUTABLE);
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, pi, null);
+
+        Toast.makeText(getBaseContext(), "전송성공", Toast.LENGTH_SHORT).show();
+    }
+
+
+
 
 
     void dosageCalendarList() throws ParseException {
@@ -201,36 +255,49 @@ public class DosageCalendarList extends AppCompatActivity {
         Intent intent = new Intent(DosageCalendarList.this, DosageList.class);
         startActivity(intent);
         DosageCalendarList.this.finish();
+        overridePendingTransition(0, 0);
     }
 
-    public void AlarmAddClick(View view) {
-//        String phoneNo = "01056522544";
-//        String sms = "폰에서 자동으로 보내는 메시지 입니다.";
-//        try {
-//            SmsManager smsManager = SmsManager.getDefault();
-//            smsManager.sendTextMessage(phoneNo, null, sms, null, null);
-//            Toast.makeText(getApplicationContext(), "전송 완료!", Toast.LENGTH_LONG).show();
-//        } catch (Exception e) {
-//            Toast.makeText(getApplicationContext(), "전송 오류!", Toast.LENGTH_LONG).show();
-//            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();//오류 원인이 찍힌다.
-//            e.printStackTrace();
-//        }
 
-        Intent intent = new Intent(DosageCalendarList.this, AlarmMain.class);
-        startActivity(intent);
-        DosageCalendarList.this.finish();
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void DosageHistoryClick(View view) {
         Intent intent = new Intent(DosageCalendarList.this, DosageHistoryMain.class);
         startActivity(intent);
         DosageCalendarList.this.finish();
+        overridePendingTransition(0, 0);
     }
 
     public void ProtectorClick(View view) {
         Intent intent = new Intent(DosageCalendarList.this, ProtectorManage.class);
         startActivity(intent);
         DosageCalendarList.this.finish();
+        overridePendingTransition(0, 0);
     }
 
 

@@ -1,7 +1,8 @@
-package com.example.nowmedi.alarm;
+package com.example.nowmedi.mainpage;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,12 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AddTime;
+import com.example.nowmedi.alarm.AddTimeAdapter;
+import com.example.nowmedi.alarm.AddTimePop;
+import com.example.nowmedi.alarm.AlarmMain;
+import com.example.nowmedi.alarm.AlarmReceiver;
 import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.history.DosageHistoryMain;
-import com.example.nowmedi.mainpage.DosageList;
-import com.example.nowmedi.mainpage.MediDetail;
-import com.example.nowmedi.protector.ProtectorAdd;
-import com.example.nowmedi.protector.ProtectorManage;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -33,27 +34,26 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
-public class AlarmMain extends AppCompatActivity {
+public class MediDetailModify extends AppCompatActivity {
+
     int Fullhour,hour,minute;
     String daytime,ampm;
     Date date1,date2,today;
     Calendar calendar1;
     int count=0;
 
-    private Long mLastClickTime = 0L;
 
-
-//    private ArrayList<Integer> HourList;
-//    private ArrayList<Integer> MinuteList;
-//    private ArrayList<Integer> IDList;
-//    private ArrayList<Date> Date1List;
-//    private ArrayList<Date> Date2List;
-//    private ArrayList<Calendar> calendarArrayList;
-
+    private ArrayList<Integer> HourList;
+    private ArrayList<Integer> MinuteList;
+    private ArrayList<Integer> IDList;
+    private ArrayList<Date> Date1List;
+    private ArrayList<Date> Date2List;
+    private ArrayList<Calendar> calendarArrayList;
     private ArrayList<AddTime> arraylist;
+
+
     private AddTimeAdapter addedTimeAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -61,29 +61,37 @@ public class AlarmMain extends AppCompatActivity {
     private DBHelper helper;
     private SQLiteDatabase db;
 
-    private EditText et_mediname;
     private EditText et_mediname_detail;
     private EditText et_caution;
+
+    private TextView mediName;
+    private String clickMediName;
+    private TextView tv_seted_date;
 
     int index= 0;
     int medicine_db_lock=0,alarm_db_lock=0,alarm_lock=0;
 
     private ArrayList<String> dbAlarmTimeList;
+    private Long mLastClickTime = 0L;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_main);
+        setContentView(R.layout.medi_detail_modify);
 
-
+        //DB 생성
+        helper = new DBHelper(MediDetailModify.this, "newdb.db", null, 1);
+        db = helper.getWritableDatabase();
+        helper.onCreate(db);
 
 
         arraylist = new ArrayList<>();
-//        Date1List = new ArrayList<>();
-//        Date2List = new ArrayList<>();
-//        IDList = new ArrayList<>();
-//        calendarArrayList = new ArrayList<>();
+        Date1List = new ArrayList<>();
+        Date2List = new ArrayList<>();
+        IDList = new ArrayList<>();
+        calendarArrayList = new ArrayList<>();
 
         addedTimeAdapter = new AddTimeAdapter(arraylist);
 
@@ -95,18 +103,87 @@ public class AlarmMain extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(addedTimeAdapter);
 
-        //에디트 텍스트 초기화
-        et_mediname = findViewById(R.id.et_mediname);
+        mediName = (TextView) findViewById(R.id.medi_name_detail);
+
+        Intent intent = getIntent(); // 보내온 Intent를 얻는다
+        clickMediName = intent.getStringExtra("mediName");
+
+        mediName.setText(clickMediName);
+
+
+        //에디트 텍스트 정보 가져오기
+        EditText editText1 = (EditText) findViewById(R.id.et_mediname_detail);
+        EditText editText2 = (EditText) findViewById(R.id.et_caution);
+        TextView textView1 = (TextView) findViewById(R.id.tv_seted_date);
+
+        Cursor cursor1 = db.rawQuery("SELECT MEDI_PRODUCT, MEDI_MEMO, MEDI_START_DATE, MEDI_END_DATE FROM MEDICINE " +
+                "WHERE MEDI_NAME = '" + clickMediName + "' ", null);
+
+        Cursor cursor2 = db.rawQuery("SELECT ALARM_ROUTINE, ALARM_TIME FROM MEDI_ALARM " +
+                "WHERE ALARM_MEDI_NAME = '" + clickMediName + "' ", null);
+
+        while (cursor1.moveToNext()) {
+            editText1.setText(cursor1.getString(0));
+            editText2.setText(cursor1.getString(1));
+            textView1.setText(cursor1.getString(2) + "~" + cursor1.getString(3));
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        Cursor cursor3 = db.rawQuery("SELECT MEDI_START_DATE, MEDI_END_DATE FROM MEDICINE", null);
+        cursor3.moveToFirst();
+        String sday = cursor3.getString(0);
+        String eday = cursor3.getString(1);
+        try {
+            date1 = simpleDateFormat.parse(sday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            date2  = simpleDateFormat.parse(eday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        while (cursor2.moveToNext()) {
+            String routine = cursor2.getString(0);
+            String time = cursor2.getString(1);
+
+            int idx = time.indexOf(":");
+
+
+            Fullhour = Integer.parseInt(time.substring(0, idx));
+            minute = Integer.parseInt(time.substring(idx+1));
+            hour = Fullhour;
+
+            if(Fullhour==12){
+                ampm="오후";
+            }
+            else if(Fullhour>12){
+                hour%=12;
+                ampm="오후";
+            }
+            else{
+                ampm="오전";
+            }
+
+            AddTime addTime = new AddTime(R.drawable.minus_icon, String.valueOf(hour)+"시",
+                    String.valueOf(minute)+"분",routine,ampm);
+            arraylist.add(addTime);
+
+        }
+
+        addedTimeAdapter.notifyDataSetChanged();
+
+
         et_mediname_detail = findViewById(R.id.et_mediname_detail);
         et_caution = findViewById(R.id.et_caution);
+        tv_seted_date = findViewById(R.id.tv_seted_date);
 
 
-        //DB 생성
-        helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
-        db = helper.getWritableDatabase();
-        helper.onCreate(db);
 
     }
+
+
     public void TimeSetClick(View v){
         Intent intent = new Intent(this, AddTimePop.class);
         intent.putExtra("data", "Test Popup");
@@ -165,6 +242,7 @@ public class AlarmMain extends AppCompatActivity {
                         today = new Date();
 
                         String td = simpleDateFormat.format(today);
+
                         try {
                             today = simpleDateFormat.parse(td);
                         } catch (ParseException e) {
@@ -174,46 +252,35 @@ public class AlarmMain extends AppCompatActivity {
                         date1.setTime(selection.first);
                         date2.setTime(selection.second);
 
-
                         if(date1.before(today)){
-                            Toast.makeText(AlarmMain.this, "시작날짜는 당일부터 가능합니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MediDetailModify.this, "시작날짜는 당일부터 가능합니다.", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             String datestring1 = simpleDateFormat.format(date1);
                             String datestring2 = simpleDateFormat.format(date2);
                             tv_date.setText(datestring1 + "~" + datestring2);
                         }
-
                     }
                 });
     }
 
 
 
-
-
-
     public void SetAlarm(View v) throws ParseException {
-
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
 
+
         int is_empty=0;
         TextView tv_date = findViewById(R.id.tv_seted_date);
 
-        if(TextUtils.isEmpty(et_mediname.getText())){
-            Toast.makeText(this, "약 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
-        }
-        else if (arraylist.isEmpty()){
+        if (arraylist.isEmpty()){
             Toast.makeText(this, "복용 시간을 입력하세요.", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(tv_date.getText())){
             Toast.makeText(this, "복용 기간을 입력하세요.", Toast.LENGTH_SHORT).show();
-        }
-        else if(is_name_duplicated()){
-
         }
         else if(is_settime_duplicated()){
 
@@ -221,69 +288,74 @@ public class AlarmMain extends AppCompatActivity {
         else if(is_dbtime_duplicated()){
 
         }
-
         else{
             is_empty=1;
         }
-
         if(is_empty==1){
-            TESTALARM();
-            MedicineDBAdd();
-            AlarmDBAdd();
-            //setall_arlam();
-//            helper.close();
-//            db.close();
+            deelte_leagcy_arlarm();
+            MedicineDBModify();
+            AlarmDBModify();
 
-            Intent intent2 = new Intent(AlarmMain.this, DosageList.class);
-            startActivity(intent2);
-            AlarmMain.this.finish();
-            Toast.makeText(AlarmMain.this, "약 알람이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-
-
+            add_alarm();
         }
+
     }
 
-    public void MedicineDBAdd(){
+    public void MedicineDBModify(){
         String startdate,enddate;
-        String mediname, product,caution;
+        String mediname, product,caution, date;
 
 
-        mediname = et_mediname.getText().toString();
+//        mediname = et_mediname.getText().toString();
         product = et_mediname_detail.getText().toString();
         caution = et_caution.getText().toString();
+
+        date = tv_seted_date.getText().toString();
+
         int count=0;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        startdate=simpleDateFormat.format(date1);
-        enddate=simpleDateFormat.format(date2);
+//        startdate=simpleDateFormat.format(date1);
+//        enddate=simpleDateFormat.format(date2);
+        int idx = date.indexOf("~");
+
+
+        startdate = date.substring(0, idx);
+        enddate = date.substring(idx+1);
 
         //약이름, 제품명, 메모 저장
 
 //        Toast.makeText(this, "약이름은:"+mediname  +"\n약상세이름은:"+product +"\n주의사항은:"+ caution +
-//                "\n시작일은:"+startdate+"\n종료일은"+enddate, Toast.LENGTH_SHORT).show();
+////                "\n시작일은:"+startdate+"\n종료일은"+enddate, Toast.LENGTH_SHORT).show();
 
 
-        db.execSQL("INSERT INTO MEDICINE" +
-                "(MEDI_NAME, MEDI_PRODUCT, MEDI_MEMO, " +
-                "MEDI_START_DATE, MEDI_END_DATE) " +
-                "VALUES ('" + mediname + "', '" + product + "', '" + caution + "', " +
-                "'" + startdate + "', '" + enddate + "');");
-
-
-
+        db.execSQL("UPDATE MEDICINE SET MEDI_PRODUCT = '" + product + "'"+
+                ", MEDI_MEMO = '" + caution + "'"+
+                ", MEDI_START_DATE = '" + startdate + "'"+
+                ", MEDI_END_DATE = '" + enddate + "'"+
+                " WHERE MEDI_NAME = '" + clickMediName + "'");
     }
 
-    public void AlarmDBAdd(){
-        String mediname,ampm,hour,minute,routine,time;
-        int idx,int_hour,nullcheck=0;
+    public void AlarmDBModify() {
+
+        String mediname, ampm, hour, minute, routine, time;
+        int idx, int_hour, nullcheck = 0;
 //        for(int i=0;i<arraylist.size();i++){}
 
-        for(int i =0; i<arraylist.size();i++) {
+        String sql1 = "DELETE FROM MEDI_ALARM " +
+                "WHERE ALARM_MEDI_NAME = '" + clickMediName + "';";
 
-            mediname = et_mediname.getText().toString();
+        db.execSQL(sql1);
+
+        for (int i = 0; i < arraylist.size(); i++) {
+
+//            mediname = et_mediname.getText().toString();
             ampm = arraylist.get(i).getAmpm();
             hour = arraylist.get(i).getTv_hour();
             minute = arraylist.get(i).getTv_minute();
             routine = arraylist.get(i).getTv_daytime();
+
+            System.out.println("arraylist1111 = " + routine);
+
 
             // 시간 , 분 원래 값으로 복구하기
             idx = hour.indexOf("시");
@@ -293,56 +365,137 @@ public class AlarmMain extends AppCompatActivity {
             if (ampm == "오후" && int_hour != 12) {
                 int_hour += 12;
                 hour = String.valueOf(int_hour);
-            }
-            else if(hour.length()<2){
-                hour= "0"+hour;
+            } else if (hour.length() < 2) {
+                hour = "0" + hour;
             }
 
             idx = minute.indexOf("분");
             minute = minute.substring(0, idx);
-            if(minute.length()<2){
-                minute= "0"+minute;
+            if (minute.length() < 2) {
+                minute = "0" + minute;
             }
-
 
             //hh:mm형식으로 만들기
             time = hour + ":" + minute;
-            System.out.println("약이름은:" + mediname + "  루틴은:" + routine + " 시간은"+time);
+//            System.out.println("약이름은:" + mediname + "  루틴은:" + routine + " 시간은" + time);
 
             db.execSQL("INSERT INTO MEDI_ALARM" +
                     "(ALARM_MEDI_NAME, ALARM_ROUTINE, ALARM_TIME) " +
-                    "VALUES ('" + mediname + "', '" + routine + "', '" + time + "');");
-
-
+                    "VALUES ('" + clickMediName + "', '" + routine + "', '" + time + "');");
         }
-
     }
 
 
-    public boolean is_name_duplicated(){
-        String is_empty=null;
-        String mediname = et_mediname.getText().toString();
-        helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
+
+
+
+    public void onBackPressed() {
+        Intent intent = new Intent(MediDetailModify.this, MediDetail.class);
+        intent.putExtra("mediName", clickMediName);
+        startActivity(intent);
+        MediDetailModify.this.finish();
+        overridePendingTransition(0, 0);
+
+    }
+
+    public void CancleClick(View view) {
+        Intent intent = new Intent(MediDetailModify.this, MediDetail.class);
+        intent.putExtra("mediName", clickMediName);
+        startActivity(intent);
+        MediDetailModify.this.finish();
+        overridePendingTransition(0, 0);
+
+    }
+
+    public void add_alarm() throws ParseException {
+
+        //        this.calendar1.setTime(date1);
+//        this.calendar1.set(Calendar.HOUR_OF_DAY, Fullhour);
+//        this.calendar1.set(Calendar.MINUTE, minute);
+//        this.calendar1.set(Calendar.SECOND, 0);
+
+        // Receiver 설정
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
+
+        Intent intent2 = new Intent(MediDetailModify.this, MediDetail.class);
+        intent2.putExtra("mediName", clickMediName);
+        startActivity(intent2);
+        MediDetailModify.this.finish();
+        Toast.makeText(MediDetailModify.this, "약 알람이 수정되었습니다.", Toast.LENGTH_SHORT).show();
+        overridePendingTransition(0, 0);
+
+
+        // 알람 설정
+//        final int id = (int) System.currentTimeMillis();
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, this.calendar1.getTimeInMillis(),pendingIntent);
+
+
+        //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
+        helper = new DBHelper(MediDetailModify.this, "newdb.db", null, 1);
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT MEDI_NAME FROM MEDICINE WHERE MEDI_NAME ='"+ mediname+ "'" , null);
 
-        if(cursor != null && cursor.moveToFirst()){
-            is_empty = cursor.getString(0);
-            cursor.close();
+
+
+        //Cursor라는 그릇에 목록을 담아주기
+        Cursor cursor1 = database.rawQuery("SELECT MEDI_NAME FROM MEDICINE WHERE MEDI_NAME='"+clickMediName+"'", null);
+
+        //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
+        while (cursor1.moveToNext()) {
+            String selectName = cursor1.getString(0);
+
+            dbAlarmTimeList = new ArrayList<String>();
+
+
+
+            Cursor cursor2 = database.rawQuery("SELECT _id, ALARM_TIME FROM MEDI_ALARM " +
+                    "WHERE ALARM_MEDI_NAME = '" + selectName + "' ", null);
+
+            //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
+            while (cursor2.moveToNext()) {
+                IDList.add(cursor2.getInt(0));
+                dbAlarmTimeList.add(cursor2.getString(1));
+
+            }
+            System.out.println("dbAlarmTimeList = " + dbAlarmTimeList);
+
+
+            for(int i =0; i<dbAlarmTimeList.size();i++) {
+
+                int idx = dbAlarmTimeList.get(i).indexOf(":");
+
+//                    int Lastindex = IDList.size();
+//                    IDList.add(Lastindex);
+//                    System.out.println("Lastindex = " + Lastindex);
+//                    Lastindex ++;
+                intent.putExtra("id",IDList.get(i));
+
+                this.calendar1.setTime(date1);
+                this.calendar1.set(Calendar.HOUR_OF_DAY, Integer.parseInt(dbAlarmTimeList.get(i).substring(0, idx)));
+                this.calendar1.set(Calendar.MINUTE, Integer.parseInt(dbAlarmTimeList.get(i).substring(idx+1)));
+                this.calendar1.set(Calendar.SECOND, 0);
+
+                calendarArrayList.add(calendar1);
+
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, IDList.get(i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendarArrayList.get(i).getTimeInMillis(),pendingIntent);
+
+
+            }
+
+            // Toast 보여주기 (알람 시간 표시)
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+//        Toast.makeText(this, "Alarm : " + format.format(calendar1.getTime()), Toast.LENGTH_LONG).show();
+
+
         }
-
-        if(is_empty != null) {
-            Toast.makeText(this, "입력한 이름은 이미 저장되어 있습니다.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        else{
-            // 중복된 이름이 없을경우 false를 반환시켜 통과
-            return false;
-        }
-
-
     }
-
 
 
     public boolean is_settime_duplicated(){
@@ -416,9 +569,6 @@ public class AlarmMain extends AppCompatActivity {
         return is_duplicated;
     }
 
-
-
-
     public boolean is_dbtime_duplicated(){
 
         String ampm,hour,minute,time;
@@ -466,9 +616,10 @@ public class AlarmMain extends AppCompatActivity {
                 time = hh_mmformat.format(calendar.getTime());
                 String duplicated_alarm_name=null;
                 String mediname;
-                helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
+                helper = new DBHelper(this, "newdb.db", null, 1);
                 SQLiteDatabase database = helper.getReadableDatabase();
-                Cursor cursor = database.rawQuery("SELECT ALARM_MEDI_NAME FROM MEDI_ALARM WHERE ALARM_TIME ='"+ time+ "'" , null);
+                Cursor cursor = database.rawQuery("SELECT ALARM_MEDI_NAME FROM MEDI_ALARM WHERE ALARM_TIME ='"+ time+
+                        "' AND ALARM_MEDI_NAME !='"+ clickMediName+"'" , null);
 
                 if(cursor != null && cursor.moveToFirst()){
                     duplicated_alarm_name = cursor.getString(0);
@@ -492,9 +643,10 @@ public class AlarmMain extends AppCompatActivity {
 
                 String duplicated_alarm_name = null;
                 String mediname;
-                helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
+                helper = new DBHelper(this, "newdb.db", null, 1);
                 SQLiteDatabase database = helper.getReadableDatabase();
-                Cursor cursor = database.rawQuery("SELECT ALARM_MEDI_NAME FROM MEDI_ALARM WHERE ALARM_TIME ='" + time + "'", null);
+                Cursor cursor = database.rawQuery("SELECT ALARM_MEDI_NAME FROM MEDI_ALARM WHERE ALARM_TIME ='"+ time+
+                        "' AND ALARM_MEDI_NAME !='"+ clickMediName+"'", null);
 
                 if (cursor != null && cursor.moveToFirst()) {
                     duplicated_alarm_name = cursor.getString(0);
@@ -517,7 +669,7 @@ public class AlarmMain extends AppCompatActivity {
 
             String medi_name=Alarm_medi_name.get(i);
 
-            helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
+            helper = new DBHelper(this, "newdb.db", null, 1);
             SQLiteDatabase database = helper.getReadableDatabase();
             Cursor cursor = database.rawQuery("SELECT MEDI_START_DATE FROM MEDICINE WHERE MEDI_NAME ='"+ medi_name+ "'" , null);
             cursor.moveToNext();
@@ -529,10 +681,6 @@ public class AlarmMain extends AppCompatActivity {
             cursor.moveToNext();
             endday_list.add(cursor.getString(0));
             cursor.close();
-
-
-
-
 
             SimpleDateFormat format_ymd = new SimpleDateFormat("yyyy.MM.dd");
             String st_sday1,st_eday1,st_sday2,st_eday2;
@@ -576,151 +724,22 @@ public class AlarmMain extends AppCompatActivity {
 
 
 
-    public void TESTALARM(){
-
-        String ampm,hour,minute,routine,time;
-        int idx,id=0,int_hour,int_minute,last_index=1,count=0;
-
-        helper = new DBHelper(AlarmMain.this, "newdb.db", null, 1);
+    public void deelte_leagcy_arlarm(){
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT seq FROM sqlite_sequence WHERE name='MEDI_ALARM"+"'" , null);
-
-        if(cursor != null && cursor.moveToFirst()){
-            last_index = cursor.getInt(0);
-
-            id=last_index;
-//            Toast.makeText(this, "id="+id, Toast.LENGTH_SHORT).show();
-            cursor.close();
+        Cursor cursor = database.rawQuery("SELECT _id FROM MEDI_ALARM WHERE ALARM_MEDI_NAME ='"+ clickMediName+ "'" , null);
+        for(int idx=0;idx<cursor.getCount();idx++){
+            cursor.moveToNext();
+            int id=cursor.getInt(0);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent myIntent = new Intent(getApplicationContext(),
+                    AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.cancel(pendingIntent);
         }
-
-
-
-        for (int i =0; i<arraylist.size();i++ ){
-            id++;
-            ampm = arraylist.get(i).getAmpm();
-            hour = arraylist.get(i).getTv_hour();
-            minute = arraylist.get(i).getTv_minute();
-            routine = arraylist.get(i).getTv_daytime();
-
-            idx = hour.indexOf("시");
-            hour = hour.substring(0, idx);
-            int_hour = Integer.parseInt(hour);
-
-            //시간 가져오기
-            if (ampm == "오후" && int_hour != 12) {
-                int_hour += 12;
-            }
-
-            //분 가져오기
-            idx = minute.indexOf("분");
-            minute = minute.substring(0, idx);
-            int_minute = Integer.parseInt(minute);
-
-            this.calendar1.setTime(date1);
-            this.calendar1.set(Calendar.HOUR_OF_DAY, int_hour);
-            this.calendar1.set(Calendar.MINUTE,int_minute );
-            this.calendar1.set(Calendar.SECOND, 0);
-
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            intent.putExtra("id",id);
-            intent.putExtra("count",count);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(),pendingIntent);
-        }
-        Toast.makeText(this, "id="+id, Toast.LENGTH_SHORT).show();
-
     }
 
 
-//    public void setall_arlam(){
-//
-//        ArrayList <String> medi_name_list;
-//        medi_name_list = new ArrayList<>();
-//        SQLiteDatabase database = helper.getReadableDatabase();
-//        Cursor cursor = database.rawQuery("SELECT * FROM MEDICINE" , null);
-//        SimpleDateFormat format_ymd = new SimpleDateFormat("yyyy.MM.dd");
-//
-//        for(int i=0;i<cursor.getCount();i++) {
-//            cursor.moveToNext();
-//
-//            String st_today,st_sday,st_eday,mediname;
-//            int compare1,compare2;
-//            Date today = new Date();
-//            Date sday = new Date();
-//            Date eday = new Date();
-//
-//            st_today= format_ymd.format(today);
-//            st_sday=cursor.getString(4);
-//            st_eday=cursor.getString(5);
-//            mediname=cursor.getString(1);
-//            System.out.println("약이름은"+mediname+" 오늘은"+ st_today+" 시작일은"+st_sday+" 종료일"+st_eday);
-//
-//            try {
-//                today = format_ymd.parse(st_today);
-//                sday = format_ymd.parse(st_sday);
-//                eday = format_ymd.parse(st_eday);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            compare1 = today.compareTo(sday);//sday1이 eday2보다 크면-(compare=0보다 크면 ok)
-//            compare2 = today.compareTo(eday);//compare2가 0보다 작으면 ok
-//            if(compare1>=0 && compare2<=0){
-//                medi_name_list.add(mediname);
-////                System.out.println("추가된약은"+mediname);
-//            }
-//        }
-//        cursor.close();
-//
-//        for(int i =0; i<medi_name_list.size();i++) {
-//            String mediname=medi_name_list.get(i);
-//            cursor = database.rawQuery("SELECT * FROM MEDI_ALARM WHERE ALARM_MEDI_NAME ='" + mediname + "'", null);
-//            for(int j=0;j<cursor.getCount();j++){
-//                cursor.moveToNext();
-//                int id=cursor.getInt(0);
-//                String time=cursor.getString(3);
-//
-//                System.out.println("알람에 추가할약은"+mediname+" id는"+id+"시간은"+time);
-//                int idx = time.indexOf(":");
-//                int hour1= Integer.parseInt(time.substring(0,idx));
-//                int minute1 = Integer.parseInt(time.substring(idx+1));
-//
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.set(Calendar.HOUR_OF_DAY, hour1);
-//                calendar.set(Calendar.MINUTE, minute1);
-//                calendar.set(Calendar.SECOND,0);
-//                Intent repeat_intent = new Intent(this, AlarmReceiver.class);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-//            }
-//        }
-//        cursor.close();
-//    }
-
-
-
-
-
-
-    public void Canclealarm(int id){
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-    }
-
-    public void onBackPressed() {
-        Intent intent = new Intent(AlarmMain.this, DosageList.class);
-        startActivity(intent);
-        AlarmMain.this.finish();
-    }
-
-    public void CancleClick(View view) {
-        Intent intent = new Intent(AlarmMain.this, DosageList.class);
-        startActivity(intent);
-        AlarmMain.this.finish();
-    }
 
 
 }

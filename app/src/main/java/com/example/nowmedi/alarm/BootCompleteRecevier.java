@@ -7,11 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.mainpage.MediDetail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

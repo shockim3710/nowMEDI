@@ -42,9 +42,9 @@ public class DosageList extends AppCompatActivity {
         TextView textView3 = (TextView) findViewById(R.id.today_date) ;
         textView3.setText(todayDate);
 
-//        helper = new DBHelper(DosageList.this, "newdb.db", null, 1);
-//        db = helper.getWritableDatabase();
-//        helper.onCreate(db);
+        helper = new DBHelper(DosageList.this, "newdb.db", null, 1);
+        db = helper.getWritableDatabase();
+        helper.onCreate(db);
 
 
         morningList = (ListView)findViewById(R.id.morning_listview);
@@ -235,18 +235,21 @@ public class DosageList extends AppCompatActivity {
         Intent intent = new Intent(DosageList.this, DosageCalendarList.class);
         startActivity(intent);
         DosageList.this.finish();
+        overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
     public void DosageHistoryClick(View view) {
         Intent intent = new Intent(DosageList.this, DosageHistoryMain.class);
         startActivity(intent);
         DosageList.this.finish();
+        overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
     public void ProtectorClick(View view) {
         Intent intent = new Intent(DosageList.this, ProtectorManage.class);
         startActivity(intent);
         DosageList.this.finish();
+        overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
 
