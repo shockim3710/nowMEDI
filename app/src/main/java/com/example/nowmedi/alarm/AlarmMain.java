@@ -2,7 +2,9 @@ package com.example.nowmedi.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -230,9 +232,11 @@ public class AlarmMain extends AppCompatActivity {
             TESTALARM();
             MedicineDBAdd();
             AlarmDBAdd();
+            //reboot_set_alarm();
             //setall_arlam();
             helper.close();
             db.close();
+
 
             Intent intent2 = new Intent(AlarmMain.this, DosageList.class);
             startActivity(intent2);
@@ -721,6 +725,14 @@ public class AlarmMain extends AppCompatActivity {
         Intent intent = new Intent(AlarmMain.this, DosageList.class);
         startActivity(intent);
         AlarmMain.this.finish();
+    }
+
+    public void reboot_set_alarm(){
+        ComponentName receiver = new ComponentName(this, BootCompleteRecevier.class);
+        PackageManager pm = this.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 

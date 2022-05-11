@@ -90,7 +90,7 @@ public class BootCompleteRecevier extends BroadcastReceiver {
                     repeat_intent.putExtra("id", id);
                     repeat_intent.putExtra("count",0);
 
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                     AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
