@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,7 +92,6 @@ public class AlarmGo extends AppCompatActivity{
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
-
 
         Add_Nextday_alarm();
 
@@ -220,12 +220,14 @@ public class AlarmGo extends AppCompatActivity{
         helper = new DBHelper(AlarmGo.this, "newdb.db", null, 1);
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor1 = database.rawQuery("SELECT ALARM_MEDI_NAME FROM MEDI_ALARM WHERE _id ='"+ id+ "'" , null);
-
         cursor1.moveToNext();
+
 
         mediName=cursor1.getString(0);
         message = mediName +" 드셔야할 시간입니다.";
+        cursor1.close();
         // 알람 문구 출력
+
 
         Date today= new Date();
         Calendar calendar = Calendar.getInstance();
@@ -238,12 +240,24 @@ public class AlarmGo extends AppCompatActivity{
 
         day= date +" "+ week;
 
+        cursor1 = database.rawQuery("SELECT ALARM_TIME FROM MEDI_ALARM WHERE _id ='"+ id+ "'" , null);
+        cursor1.moveToNext();
+        time = cursor1.getString(0);
+        cursor1.close();
 
-        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("hh:mm");
-        time = simpleDateFormat2.format(today);
 
-        SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("a");
-        ampm = simpleDateFormat3.format(today);
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm");
+        try {
+            today=simpleDateFormat2.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("hh:mm");
+        time = simpleDateFormat3.format(today);
+
+        SimpleDateFormat simpleDateFormat4 = new SimpleDateFormat("a");
+        ampm = simpleDateFormat4.format(today);
 
         tv_alarm_count.setText(count);
         tv_alarm_message.setText(message);
