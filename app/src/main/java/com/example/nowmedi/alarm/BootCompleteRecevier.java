@@ -25,7 +25,7 @@ public class BootCompleteRecevier extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             // Set the alarm here.
-            Toast.makeText(context, "테스트 테스트 테스트", Toast.LENGTH_SHORT).show();
+
 
             helper = new DBHelper(context, "newdb.db", null, 1);
             db = helper.getWritableDatabase();
@@ -90,7 +90,7 @@ public class BootCompleteRecevier extends BroadcastReceiver {
                     repeat_intent.putExtra("id", id);
                     repeat_intent.putExtra("count",0);
 
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
                     AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
                 }
@@ -99,6 +99,7 @@ public class BootCompleteRecevier extends BroadcastReceiver {
             helper.close();
             db.close();
 
+            Toast.makeText(context, "약알람 등록 완료", Toast.LENGTH_SHORT).show();
 
         }
     }

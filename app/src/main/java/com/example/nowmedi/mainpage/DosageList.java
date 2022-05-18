@@ -3,7 +3,11 @@ package com.example.nowmedi.mainpage;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -57,6 +61,21 @@ public class DosageList extends AppCompatActivity {
             dosageDinnerList();
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+            }
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&!Settings.canDrawOverlays(this)){
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+getPackageName()));
+            startActivity(intent);
         }
 
 

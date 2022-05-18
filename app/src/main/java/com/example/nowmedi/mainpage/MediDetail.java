@@ -2,6 +2,7 @@ package com.example.nowmedi.mainpage;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AlarmReceiver;
 import com.example.nowmedi.database.DBHelper;
 
 public class MediDetail extends AppCompatActivity {
@@ -108,7 +110,7 @@ public class MediDetail extends AppCompatActivity {
     void showDialog() {
         AlertDialog.Builder msgBuilder = new AlertDialog.Builder(MediDetail.this)
                 .setTitle("")
-                .setMessage("약을 삭제하시겠습니까?")
+                .setMessage("약을 삭제하시겠습니까? 약 내역도 같이 삭제됩니다.")
                 .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -122,13 +124,17 @@ public class MediDetail extends AppCompatActivity {
                         for(int idx=0;idx<cursor.getCount();idx++){
                             cursor.moveToNext();
                             int id=cursor.getInt(0);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(MediDetail.this, id, intent,PendingIntent.FLAG_UPDATE_CURRENT);
-                            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                            Intent myIntent = new Intent(getApplicationContext(),
+                                    AlarmReceiver.class);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                                    getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+
                             alarmManager.cancel(pendingIntent);
+                            System.out.println("삭제한약 id"+id);
                         }
+
                         db = helper.getWritableDatabase();
-
-
                         Toast.makeText(MediDetail.this, "약을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
 

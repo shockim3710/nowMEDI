@@ -18,7 +18,11 @@ import com.example.nowmedi.mainpage.DosageCalendarList;
 import com.example.nowmedi.mainpage.DosageList;
 import com.example.nowmedi.protector.ProtectorManage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class DosageHistoryMain extends AppCompatActivity {
     private ArrayList<DosageHistory> arraylist;
@@ -43,7 +47,11 @@ public class DosageHistoryMain extends AppCompatActivity {
         arraylist = new ArrayList<>();
         dosageHistoryAdapter = new DosageHistoryAdapter(arraylist);
         recyclerView.setAdapter(dosageHistoryAdapter);
-        display_data();
+        try {
+            display_data();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -125,17 +133,25 @@ public class DosageHistoryMain extends AppCompatActivity {
 //        dosageHistoryAdapter.notifyDataSetChanged();
 
     }
-public void display_data  (){
+public void display_data  () throws ParseException {
     helper = new DBHelper(DosageHistoryMain.this, "newdb.db", null, 1);
         SQLiteDatabase database = helper.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT DISTINCT(HISTORY_MEDI_NAME) FROM MEDI_HISTORY", null);
+//        Cursor cursor = database.rawQuery("SELECT DISTINCT(HISTORY_MEDI_NAME) FROM MEDI_HISTORY", null);
+        Cursor cursor = database.rawQuery("SELECT DISTINCT(MEDI_NAME) FROM MEDICINE", null);
+
+//    Cursor cursor = database.rawQuery("SELECT DISTINCT(MEDI_NAME) FROM MEDICINE UNION " +
+//            "SELECT DISTINCT(HISTORY_MEDI_NAME) FROM MEDI_HISTORY", null);
 
         int recordCount = cursor.getCount();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+
 
         for (int i=0; i<recordCount; i++){
             cursor.moveToNext();
 
             String medi_name = cursor.getString(0);
+
 
             Cursor cursor2 = database.rawQuery("SELECT COUNT(c.HISTORY_MEDI_NAME) FROM (SELECT * FROM MEDI_HISTORY " +
                     "WHERE HISTORY_MEDI_NAME ='"+medi_name +"'and HISTORY_TIME IS NOT NULL) AS c", null);
@@ -143,11 +159,41 @@ public void display_data  (){
             int bunja = cursor2.getInt(0);
             System.out.println("분자는?"+bunja);
 
-            cursor2 = database.rawQuery("Select count(c.HISTORY_MEDI_NAME) FROM (SELECT * FROM MEDI_HISTORY "+
-                    "WHERE HISTORY_MEDI_NAME ='"+ medi_name +"')AS c", null);
+//            cursor2 = database.rawQuery("Select count(c.HISTORY_MEDI_NAME) FROM (SELECT * FROM MEDI_HISTORY "+
+//                    "WHERE HISTORY_MEDI_NAME ='"+ medi_name +"')AS c", null);
+//            cursor2.moveToNext();
+
+
+
+
+            cursor2 = database.rawQuery("Select MEDI_START_DATE, MEDI_END_DATE FROM MEDICINE " +
+                    "WHERE MEDI_NAME ='"+ medi_name +"'", null);
             cursor2.moveToNext();
-            int bunmo = cursor2.getInt(0);
-            System.out.println("분모는?"+bunmo);
+
+            String sdate = cursor2.getString(0);
+            String edate = cursor2.getString(1);
+
+            cursor2 = database.rawQuery("Select COUNT(ALARM_ROUTINE) FROM MEDI_ALARM " +
+                    "WHERE ALARM_MEDI_NAME ='"+ medi_name +"'", null);
+            cursor2.moveToNext();
+
+            int routineCount = cursor2.getInt(0);
+
+
+            Date startDate = format.parse(sdate);
+            Date endDate = format.parse(edate);
+
+
+            long diff = endDate.getTime() - startDate.getTime();
+
+            TimeUnit time = TimeUnit.DAYS;
+            long dateCount = time.convert(diff, TimeUnit.MILLISECONDS);
+
+
+
+            long bunmo = (dateCount+1) * routineCount;
+            System.out.println("분모는?"+((dateCount+1) * routineCount));
+
 
             float percent = Math.round(((float) bunja/(float) bunmo) * 100.0f);
 

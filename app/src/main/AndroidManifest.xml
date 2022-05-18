@@ -4,6 +4,10 @@
     package="com.example.nowmedi">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     "<uses-permission android:name="android.permission.SEND_SMS" />"
 
 
@@ -66,15 +70,32 @@
 
         <activity android:name=".mainpage.MediDetailModify"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".alarm.AlarmGo"
+            android:screenOrientation="portrait"
+            />
 
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false"
+            />
         <receiver
             android:name=".alarm.BootCompleteRecevier"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
             </intent-filter>
         </receiver>
+
+
+
+        <service
+            android:name=".alarm.AlarmService"
+            android:enabled="true"
+            />
 
 
     </application>

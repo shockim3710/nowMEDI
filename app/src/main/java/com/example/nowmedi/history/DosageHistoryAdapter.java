@@ -2,6 +2,7 @@ package com.example.nowmedi.history;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
+import com.example.nowmedi.mainpage.MediDetailAdapter;
 
 import java.util.ArrayList;
 
@@ -80,9 +82,21 @@ public class DosageHistoryAdapter extends RecyclerView.Adapter<DosageHistoryAdap
                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                //Cursor라는 그릇에 목록을 담아주기
+                                Cursor cursor = db.rawQuery("SELECT COUNT(MEDI_NAME) FROM MEDICINE " +
+                                        "WHERE MEDI_NAME = '" + curName + "' ", null);
+
+                                //리스트뷰에 목록 채워주는 도구인 adapter준비
+                                MediDetailAdapter adapter = new MediDetailAdapter();
+
+                                //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
+                                int mediCount = 0;
+                                while (cursor.moveToNext()) {
+                                    mediCount = cursor.getInt(0);
+                                }
 
 
-                                Toast.makeText(view.getContext(), "네역을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(view.getContext(), "내역을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
                                 String sql1 = "DELETE FROM  MEDI_HISTORY " +
                                         "WHERE HISTORY_MEDI_NAME = '" + curName + "';";
@@ -91,6 +105,21 @@ public class DosageHistoryAdapter extends RecyclerView.Adapter<DosageHistoryAdap
                                 notifyItemRemoved(holder.getAdapterPosition());
                                 notifyItemRangeRemoved(holder.getAdapterPosition(), arrayList.size());
 
+//                                if (mediCount != 0) {
+//                                    Toast.makeText(view.getContext(), "약 알람 목록에 있으므로 삭제하지 못하였습니다.", Toast.LENGTH_SHORT).show();
+//
+//                                }
+//                                else {
+//                                    Toast.makeText(view.getContext(), "내역을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+//
+//                                    String sql1 = "DELETE FROM  MEDI_HISTORY " +
+//                                            "WHERE HISTORY_MEDI_NAME = '" + curName + "';";
+//                                    db.execSQL(sql1);
+//                                    remove(holder.getAdapterPosition());
+//                                    notifyItemRemoved(holder.getAdapterPosition());
+//                                    notifyItemRangeRemoved(holder.getAdapterPosition(), arrayList.size());
+//
+//                                }
                             }
 
                         })

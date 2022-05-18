@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,6 +29,7 @@ public class AlarmGo extends AppCompatActivity{
     private DBHelper helper;
     private SQLiteDatabase db;
     private TextView tv_alarm_count,tv_alarm_message,tv_alarm_day,tv_alarm_ampm,tv_alarm_time;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,8 @@ public class AlarmGo extends AppCompatActivity{
             Intent repeat_intent = new Intent(this, AlarmReceiver.class);
             repeat_intent.putExtra("id", id);
             repeat_intent.putExtra("count",count);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent,PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
@@ -84,6 +88,11 @@ public class AlarmGo extends AppCompatActivity{
 
 
     public void alarm_close(View v){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         Add_Nextday_alarm();
 
         if (this.mediaPlayer.isPlaying()) {
@@ -183,7 +192,8 @@ public class AlarmGo extends AppCompatActivity{
         Intent repeat_intent = new Intent(this, AlarmReceiver.class);
         repeat_intent.putExtra("id", id);
         repeat_intent.putExtra("count",count);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
@@ -210,12 +220,14 @@ public class AlarmGo extends AppCompatActivity{
         helper = new DBHelper(AlarmGo.this, "newdb.db", null, 1);
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor1 = database.rawQuery("SELECT ALARM_MEDI_NAME FROM MEDI_ALARM WHERE _id ='"+ id+ "'" , null);
-
         cursor1.moveToNext();
+
 
         mediName=cursor1.getString(0);
         message = mediName +" 드셔야할 시간입니다.";
+        cursor1.close();
         // 알람 문구 출력
+
 
         Date today= new Date();
         Calendar calendar = Calendar.getInstance();
@@ -228,12 +240,24 @@ public class AlarmGo extends AppCompatActivity{
 
         day= date +" "+ week;
 
+        cursor1 = database.rawQuery("SELECT ALARM_TIME FROM MEDI_ALARM WHERE _id ='"+ id+ "'" , null);
+        cursor1.moveToNext();
+        time = cursor1.getString(0);
+        cursor1.close();
 
-        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("hh:mm");
-        time = simpleDateFormat2.format(today);
 
-        SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("a");
-        ampm = simpleDateFormat3.format(today);
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm");
+        try {
+            today=simpleDateFormat2.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("hh:mm");
+        time = simpleDateFormat3.format(today);
+
+        SimpleDateFormat simpleDateFormat4 = new SimpleDateFormat("a");
+        ampm = simpleDateFormat4.format(today);
 
         tv_alarm_count.setText(count);
         tv_alarm_message.setText(message);
