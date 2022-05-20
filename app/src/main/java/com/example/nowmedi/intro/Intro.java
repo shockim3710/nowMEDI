@@ -1,8 +1,12 @@
 package com.example.nowmedi.intro;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
@@ -17,6 +21,7 @@ public class Intro extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 Intent intent = new Intent(getApplicationContext(), DosageList.class);
                 startActivity(intent); //인트로 실행 후 바로 MainActivity로 넘어감.
                 finish();
