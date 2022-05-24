@@ -11,9 +11,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
@@ -39,12 +42,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 
 public class AlarmGo extends AppCompatActivity{
     private MediaPlayer mediaPlayer;
-    int id,count;
+    int id,count,routine;
     private DBHelper helper;
     private SQLiteDatabase db;
     private TextView tv_alarm_count,tv_alarm_message,tv_alarm_day,tv_alarm_ampm,tv_alarm_time;
@@ -73,6 +78,7 @@ public class AlarmGo extends AppCompatActivity{
     final static int BT_CONNECTING_STATUS = 3;
     final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +88,8 @@ public class AlarmGo extends AppCompatActivity{
         Intent intent = getIntent();
         id = intent.getIntExtra("id",0);
         count = intent.getIntExtra("count",0);
-
+        setContentView(R.layout.alarm_go);
+        create_screen();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 
@@ -100,9 +107,19 @@ public class AlarmGo extends AppCompatActivity{
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
+            //알람 설정
+            setVolumeControlStream (AudioManager.STREAM_MUSIC);
+            AudioManager audio = null;
+            audio = (AudioManager) getSystemService(this.AUDIO_SERVICE);
+            audio.setStreamVolume(AudioManager.STREAM_MUSIC,
+                    (int)(audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 10), // 10씩 늘림
+                    0);
+
             // 알람음 재생
             this.mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
+            this.mediaPlayer.setVolume(1.0f,1.0f);
             this.mediaPlayer.start();
+            this.mediaPlayer.setLooping(true);
 
         }
         else{
@@ -112,9 +129,38 @@ public class AlarmGo extends AppCompatActivity{
             // 내역 db 추가 해야됨
         }
 
-        setContentView(R.layout.alarm_go);
-        create_screen();
-        BluetoothMedicineBox();
+
+        find_routine();
+
+        try {
+            BluetoothMedicineBox();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+//        final Handler handler = new Handler(Looper.getMainLooper());
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    // 코드 작성
+//                    Toast.makeText(AlarmGo.this, "5초", Toast.LENGTH_SHORT).show();
+//                    handler.postDelayed(this,5000);
+//                }
+//            }, 0, 5000);
+//        }
+
+//        Timer timer =  new Timer();
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//                Toast.makeText(AlarmGo.this, "aa", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        timer.schedule(timerTask,0,5000);
+
 
 
     }
@@ -132,21 +178,25 @@ public class AlarmGo extends AppCompatActivity{
 
 
 
-    public void alarm_close(View v){
+    public void alarm_close(View v) throws IOException {
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
+        BluetoothMedicineBox();
 
-        Add_Nextday_alarm();
 
-        if (this.mediaPlayer.isPlaying()) {
-            this.mediaPlayer.stop();
-            this.mediaPlayer.release();
-            this.mediaPlayer = null;
-        }
-        IS_CLICKED();
-        finishAndRemoveTask();
+
+
+//        Add_Nextday_alarm(); //다음날 알람 추가
+//
+//        if (this.mediaPlayer.isPlaying()) { //소리 끄기
+//            this.mediaPlayer.stop();
+//            this.mediaPlayer.release();
+//            this.mediaPlayer = null;
+//        }
+//        IS_CLICKED(); //내역 저장
+//        finishAndRemoveTask();
     }
 
 
@@ -316,14 +366,7 @@ public class AlarmGo extends AppCompatActivity{
 
 
 
-
-
-
-
-
-
-
-    public void BluetoothMedicineBox(){
+    public void BluetoothMedicineBox() throws IOException {
 
 
 
@@ -362,6 +405,25 @@ public class AlarmGo extends AppCompatActivity{
                 };
 
                 connectSelectedDevice("Medicine_Box");
+
+                if(mBluetoothSocket == null) {
+                    mBluetoothSocket = mBluetoothDevice.createRfcommSocketToServiceRecord(BT_UUID);
+                    mBluetoothSocket.connect();
+                    mThreadConnectedBluetooth = new ConnectedBluetoothThread(mBluetoothSocket);
+                    mThreadConnectedBluetooth.start();
+                    mBluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
+                }
+
+                if(mBluetoothDevice == null) {
+                    mThreadConnectedBluetooth.write("1");
+                    System.out.println("LED가 켜집니다.");
+
+                    mThreadConnectedBluetooth.write(Integer.toString(routine));
+                }
+
+
+
+
             } else {
                 Toast.makeText(getApplicationContext(), "페어링된 장치가 없습니다.", Toast.LENGTH_LONG).show();
             }
@@ -432,6 +494,8 @@ public class AlarmGo extends AppCompatActivity{
 
 
     void connectSelectedDevice(String selectedDeviceName) {
+//        boolean checkBluetoothName = false;
+
         for (BluetoothDevice tempDevice : mPairedDevices) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -445,9 +509,16 @@ public class AlarmGo extends AppCompatActivity{
             }
             if (selectedDeviceName.equals(tempDevice.getName())) {
                 mBluetoothDevice = tempDevice;
+//                checkBluetoothName = true;
+//                System.out.println("tempDevice = " + tempDevice);
+
                 break;
             }
+
+
         }
+
+
         try {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -458,8 +529,55 @@ public class AlarmGo extends AppCompatActivity{
             mThreadConnectedBluetooth.start();
             mBluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
         } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
         }
+
+//        System.out.println("checkBluetoothName = " + checkBluetoothName);
+//
+//        if(checkBluetoothName == false) {
+//            Toast.makeText(getApplicationContext(), "메디슨 박스와 연결되지 않았습니다. 스마트폰에 등록되어 있는지 메디슨 박스의 블루투스를 확인해주세요.", Toast.LENGTH_LONG).show();
+//            System.out.println("메디슨 박스와 연결되지 않았습니다. 스마트폰에 등록되어 있는지 메디슨 박스의 블루투스를 확인해주세요.");
+//        }
+//        else {
+//            try {
+//                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+//                    return;
+//                }
+//                mBluetoothSocket = mBluetoothDevice.createRfcommSocketToServiceRecord(BT_UUID);
+//                mBluetoothSocket.connect();
+//                mThreadConnectedBluetooth = new ConnectedBluetoothThread(mBluetoothSocket);
+//                mThreadConnectedBluetooth.start();
+//                mBluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
+//            } catch (IOException e) {
+////            Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
+//            }
+//        }
+    }
+
+
+
+
+
+
+
+
+    public void find_routine(){
+        helper = new DBHelper(AlarmGo.this, "newdb.db", null, 1);
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor1 = database.rawQuery("SELECT ALARM_ROUTINE FROM MEDI_ALARM WHERE _id ='"+ id+ "'" , null);
+        cursor1.moveToNext();
+        String rt=cursor1.getString(0);
+
+        if(rt.equals("아침약")) {
+            routine=3;
+        }
+        else if(rt.equals("점심약")){
+            routine=4;
+        }
+        else if(rt.equals("저녁약")){
+            routine=5;
+        }
+        cursor1.close();
     }
 
 

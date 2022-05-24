@@ -12,10 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AddTimePop extends AppCompatActivity {
 
     TimePicker mTimePicker;
     int Hour,minute;
+    int th,tm;
     String Daytime="아침약";
     ImageButton ib_morning,ib_afternoon,ib_night;
 
@@ -30,6 +34,15 @@ public class AddTimePop extends AppCompatActivity {
         ib_night=(ImageButton)findViewById(R.id.ib_night);
         ib_morning.setBackgroundColor(Color.parseColor("#2C7ABD"));
 
+
+        //변경 사항
+        Date today= new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
+        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("mm");
+        th =  Integer.parseInt(simpleDateFormat.format(today));
+        tm = Integer.parseInt(simpleDateFormat1.format(today));
+        Hour=th;
+        minute=tm;
 
         mTimePicker = (TimePicker) findViewById(R.id.timepicker);
         mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
