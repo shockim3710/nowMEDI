@@ -1,7 +1,9 @@
 package com.example.nowmedi.mainpage;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -14,9 +16,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.nowmedi.R;
+import com.example.nowmedi.alarm.AlarmGo;
 import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
 import com.example.nowmedi.history.DosageHistoryMain;
@@ -33,6 +39,8 @@ public class DosageList extends AppCompatActivity {
     private ListView morningList;
     private ListView lunchList;
     private ListView dinnerList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +116,13 @@ public class DosageList extends AppCompatActivity {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+getPackageName()));
             startActivity(intent);
         }
+
+
+
+
+
+
+
 
 
 

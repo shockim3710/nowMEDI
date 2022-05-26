@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,9 +28,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
+import com.example.nowmedi.mainpage.DosageCalendarList;
+import com.example.nowmedi.mainpage.DosageList;
+import com.example.nowmedi.mainpage.DosageListAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +54,9 @@ import java.util.UUID;
 
 
 public class AlarmGo extends AppCompatActivity{
+    // 문자
+    private final int MY_PERMISSION_REQUEST_SMS = 1001;
+
     private final int RECIEVE_MESSAGE = 1;
     private MediaPlayer mediaPlayer;
     int id,count,routine;
@@ -56,6 +64,8 @@ public class AlarmGo extends AppCompatActivity{
     private SQLiteDatabase db;
     private TextView tv_alarm_count,tv_alarm_message,tv_alarm_day,tv_alarm_ampm,tv_alarm_time;
     private Long mLastClickTime = 0L;
+
+    private String inputPhoneNum;
 
 
     TextView mTvBluetoothStatus;
@@ -90,6 +100,8 @@ public class AlarmGo extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
 
+        // 문자
+        inputPhoneNum = "";
 
         Intent intent = getIntent();
         id = intent.getIntExtra("id",0);
@@ -131,8 +143,24 @@ public class AlarmGo extends AppCompatActivity{
         else{
             Add_Nextday_alarm();
             IS_NOT_CLICKED();
+
+
+            //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
+            helper = new DBHelper(AlarmGo.this, "newdb.db", null, 1);
+            SQLiteDatabase database = helper.getReadableDatabase();
+
+            //Cursor라는 그릇에 목록을 담아주기
+            Cursor cursor = database.rawQuery("SELECT PROTECTOR_PHONE_NUM, PROTECTOR_MESSAGE FROM PROTECTOR", null);
+
+            //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
+            while (cursor.moveToNext()) {
+                String num = cursor.getString(0);
+                String renum = num.replaceAll("[^0-9]","");
+
+                sendSMS(renum, cursor.getString(1));
+            }
+
             finishAndRemoveTask();
-            // 내역 db 추가 해야됨
         }
 
 
@@ -167,6 +195,41 @@ public class AlarmGo extends AppCompatActivity{
 //            }
 //        };
 //        timer.schedule(timerTask,0,5000);
+
+
+
+
+        //문자 권한이 부여되어 있는지 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+                // Android provides a utility method, shouldShowRequestPermissionRationale(), that returns true if the user has previously
+                // denied the request, and returns false if a user has denied a permission and selected the Don't ask again option in the
+                // permission request dialog, or if a device policy prohibits the permission. If a user keeps trying to use functionality that
+                // requires a permission, but keeps denying the permission request, that probably means the user doesn't understand why
+                // the app needs the permission to provide that functionality. In a situation like that, it's probably a good idea to show an
+                // explanation.
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("알림");
+                builder.setMessage("SMS 권한을 부여하지 않으면 이 앱이 제대로 작동하지 않습니다.");
+                builder.setIcon(android.R.drawable.ic_dialog_info);
+
+                builder.setNeutralButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(AlarmGo.this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SMS);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SMS);
+            }
+        }
+
+
+
 
 
 
@@ -313,11 +376,12 @@ public class AlarmGo extends AppCompatActivity{
         tv_alarm_day=(TextView) findViewById(R.id.tv_alarm_day);
         tv_alarm_ampm=(TextView) findViewById(R.id.tv_alarm_ampm);
         tv_alarm_time=(TextView) findViewById(R.id.tv_alarm_time);
-
+        int ct= this.count+1;  //추가
         String count,message,day,ampm,time;
         count="1";message="테스트";day="1월 2일";ampm="오전";time="10:25";
 
-        count=String.valueOf(this.count)+"번째 알람";
+        count= ct +"번째 알람"; // 변경
+
         //알람 횟수 출력
 
 
@@ -332,7 +396,7 @@ public class AlarmGo extends AppCompatActivity{
 
 
         mediName=cursor1.getString(0);
-        message = mediName +" 드셔야할 시간입니다.";
+        message = mediName +" 복용 알람입니다.\n복용 후 메디슨 박스에서 알람을 끄세요.";
         cursor1.close();
         // 알람 문구 출력
 
@@ -457,6 +521,15 @@ public class AlarmGo extends AppCompatActivity{
                                 System.out.println("버튼을 눌렀습니다.!!!!!!!!!!!" + readMessage);
                                 mThreadConnectedBluetooth.write("0");
                                 System.out.println("LED가 꺼집니다.");
+                                Add_Nextday_alarm(); //다음날 알람 추가
+
+                                if (mediaPlayer.isPlaying()) { //소리 끄기
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                    mediaPlayer = null;
+                                }
+                                IS_CLICKED(); //내역 저장
+                                finishAndRemoveTask(); //종료
                             }
                         }
                     };
@@ -682,6 +755,20 @@ public class AlarmGo extends AppCompatActivity{
         }
         cursor1.close();
     }
+
+
+    // 문자 발송기능
+    private void sendSMS(String phoneNumber, String message) {
+        PendingIntent pi = PendingIntent.getActivity(this, 0,
+                new Intent(this, AlarmGo.class), PendingIntent.FLAG_MUTABLE);
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, pi, null);
+
+        Toast.makeText(getBaseContext(), "약을 복용하지 않아 보호자에게 문자가 전송됩니다.", Toast.LENGTH_SHORT).show();
+    }
+
+
 
 
 

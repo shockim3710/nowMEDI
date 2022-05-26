@@ -36,12 +36,7 @@ import java.util.Date;
 
 public class DosageCalendarList extends AppCompatActivity {
 
-    String inputPhoneNum;
-    ImageButton sendSMSBt;
-
-    // 문자
-    private final int MY_PERMISSION_REQUEST_SMS = 1001;
-
+//    ImageButton sendSMSBt;
 
     private CalendarView calendarView;
 
@@ -61,10 +56,7 @@ public class DosageCalendarList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dosage_calendar_list);
-
-        // 문자
-        inputPhoneNum = "";
-        sendSMSBt = findViewById(R.id.send_sms_button);
+//        sendSMSBt = findViewById(R.id.send_sms_button);
 
 
 
@@ -115,65 +107,14 @@ public class DosageCalendarList extends AppCompatActivity {
 
 
 
-        //문자 권한이 부여되어 있는지 확인
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
-                // Android provides a utility method, shouldShowRequestPermissionRationale(), that returns true if the user has previously
-                // denied the request, and returns false if a user has denied a permission and selected the Don't ask again option in the
-                // permission request dialog, or if a device policy prohibits the permission. If a user keeps trying to use functionality that
-                // requires a permission, but keeps denying the permission request, that probably means the user doesn't understand why
-                // the app needs the permission to provide that functionality. In a situation like that, it's probably a good idea to show an
-                // explanation.
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("알림");
-                builder.setMessage("SMS 권한을 부여하지 않으면 이 앱이 제대로 작동하지 않습니다.");
-                builder.setIcon(android.R.drawable.ic_dialog_info);
-
-                builder.setNeutralButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(DosageCalendarList.this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SMS);
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SMS);
-            }
-        }
 
 
-        // 문자 (나중에 클릭할때 약알람추가화면으로 변경해야함)
-        sendSMSBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                sendSMS(inputPhoneNum.toString(), "테스트 중입니다1");
-//                sendSMS(inputPhoneNum.toString(), "테스트 중입니다2");
-//                sendSMS(inputPhoneNum.toString(), "테스트 중입니다3");
-
-                Intent intent = new Intent(DosageCalendarList.this, AlarmMain.class);
-                startActivity(intent);
-                DosageCalendarList.this.finish();
-
-            }
-        });
 
     }
 
 
 
-    // 문자 발송기능
-    private void sendSMS(String phoneNumber, String message) {
-        PendingIntent pi = PendingIntent.getActivity(this, 0,
-                new Intent(this, DosageCalendarList.class), PendingIntent.FLAG_MUTABLE);
 
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber, null, message, pi, null);
-
-        Toast.makeText(getBaseContext(), "전송성공", Toast.LENGTH_SHORT).show();
-    }
 
 
 
@@ -277,7 +218,12 @@ public class DosageCalendarList extends AppCompatActivity {
 
 
 
+    public void AlarmAddClick(View view) {
+        Intent intent = new Intent(DosageCalendarList.this, AlarmMain.class);
+        startActivity(intent);
+        DosageCalendarList.this.finish();
 
+    }
 
 
 
