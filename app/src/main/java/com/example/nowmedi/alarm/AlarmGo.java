@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,7 @@ import java.util.UUID;
 
 
 public class AlarmGo extends AppCompatActivity{
+    private final int RECIEVE_MESSAGE = 1;
     private MediaPlayer mediaPlayer;
     int id,count,routine;
     private DBHelper helper;
@@ -77,6 +79,10 @@ public class AlarmGo extends AppCompatActivity{
     final static int BT_MESSAGE_READ = 2;
     final static int BT_CONNECTING_STATUS = 3;
     final static UUID BT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+
+    // Message types sent from the BluetoothChatService Handler
+    public static final int MESSAGE_READ = 2;
 
 
     @Override
@@ -112,7 +118,7 @@ public class AlarmGo extends AppCompatActivity{
             AudioManager audio = null;
             audio = (AudioManager) getSystemService(this.AUDIO_SERVICE);
             audio.setStreamVolume(AudioManager.STREAM_MUSIC,
-                    (int)(audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 10), // 10씩 늘림
+                    (int)(audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 1), // 10씩 늘림, 알람볼륨조절
                     0);
 
             // 알람음 재생
@@ -134,6 +140,7 @@ public class AlarmGo extends AppCompatActivity{
 
         try {
             BluetoothMedicineBox();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -168,12 +175,18 @@ public class AlarmGo extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (this.mBluetoothHandler != null){
+            mBluetoothHandler.removeMessages(0);
+        }
+        if (this.mThreadConnectedBluetooth != null) {
+            mThreadConnectedBluetooth.cancel();
+        }
         // MediaPlayer release
         if (this.mediaPlayer != null) {
             this.mediaPlayer.release();
             this.mediaPlayer = null;
         }
-
     }
 
 
@@ -390,6 +403,8 @@ public class AlarmGo extends AppCompatActivity{
                     //mListPairedDevices.add(device.getName() + "\n" + device.getAddress());
                 }
 
+
+
                 mBluetoothHandler = new Handler() {
                     public void handleMessage(android.os.Message msg) {
                         if (msg.what == BT_MESSAGE_READ) {
@@ -404,6 +419,9 @@ public class AlarmGo extends AppCompatActivity{
                     }
                 };
 
+
+
+
                 connectSelectedDevice("Medicine_Box");
 
                 if(mBluetoothSocket == null) {
@@ -414,12 +432,97 @@ public class AlarmGo extends AppCompatActivity{
                     mBluetoothHandler.obtainMessage(BT_CONNECTING_STATUS, 1, -1).sendToTarget();
                 }
 
-                if(mBluetoothDevice == null) {
+
+                if(mThreadConnectedBluetooth != null) {
                     mThreadConnectedBluetooth.write("1");
                     System.out.println("LED가 켜집니다.");
 
                     mThreadConnectedBluetooth.write(Integer.toString(routine));
+
+
+                    mBluetoothHandler = new Handler() {
+                        public void handleMessage(android.os.Message msg) {
+                            if (msg.what == BT_MESSAGE_READ) {
+                                String readMessage = null;
+
+                                byte[] readBuf = (byte[]) msg.obj;
+                                readMessage = new String(readBuf, 0, msg.arg1);
+//                                try {
+//
+//                                    readMessage = new String((byte[]) msg.obj, "UTF-8");
+//
+//                                } catch (UnsupportedEncodingException e) {
+//                                    e.printStackTrace();
+//                                }
+                                System.out.println("버튼을 눌렀습니다.!!!!!!!!!!!" + readMessage);
+                                mThreadConnectedBluetooth.write("0");
+                                System.out.println("LED가 꺼집니다.");
+                            }
+                        }
+                    };
+
+
+
+
+
+
+//                    mBluetoothHandler = new Handler() {
+//                        public void handleMessage(android.os.Message msg) {
+//                            if (msg.what == BT_MESSAGE_READ) {
+//                                String readMessage = null;
+//                                try {
+//                                    readMessage = new String((byte[]) msg.obj, "UTF-8");
+//                                } catch (UnsupportedEncodingException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                System.out.println("버튼을 눌렀습니다.");
+//
+//                                if(readMessage == "2") {
+//                                    mThreadConnectedBluetooth.write("0");
+//                                    System.out.println("LED가 꺼집니다.");
+//                                }
+//
+//                            }
+//                        }
+//                    };
+
+
+
+
+
+
+
+
+
+
+
+
                 }
+
+
+
+
+
+//                // The Handler that gets information back from the BluetoothChatService
+//                final Handler mHandler = new Handler() {
+//                    @Override
+//                    public void handleMessage(Message msg) {
+//                        switch (msg.what) {
+//                            case MESSAGE_READ:
+//                                byte[] readBuf = (byte[]) msg.obj;
+//                                String strIncom = new String(readBuf, 0, msg.arg1);
+//
+//                                if (strIncom.equals("2")) {
+//                                    mThreadConnectedBluetooth.write("0");
+//                                }
+//
+//                                //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+//                                break;
+//                        }
+//                    }
+//                };
+
+
 
 
 
