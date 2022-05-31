@@ -46,7 +46,6 @@ public class AddTimeAdapter extends RecyclerView.Adapter<AddTimeAdapter.CustomVi
         })
         ;
 
-
     }
 
     @Override
@@ -64,17 +63,12 @@ public class AddTimeAdapter extends RecyclerView.Adapter<AddTimeAdapter.CustomVi
         }
     }
 
-
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         protected ImageView iv_minus;
         protected TextView tv_Hour;
         protected TextView tv_minute;
         protected TextView tv_daytime;
         protected TextView tv_ampm;
-
-
-
-
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);

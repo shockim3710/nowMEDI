@@ -7,28 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
-import com.example.nowmedi.alarm.AddTime;
 import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
 import com.example.nowmedi.history.DosageHistoryMain;
-import com.example.nowmedi.mainpage.DosageCalendarList;
 import com.example.nowmedi.mainpage.DosageList;
-import com.example.nowmedi.mainpage.DosageListAdapter;
-import com.example.nowmedi.mainpage.MediDetail;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Map;
 
 public class ProtectorManage extends AppCompatActivity {
 
@@ -36,7 +25,6 @@ public class ProtectorManage extends AppCompatActivity {
     private SQLiteDatabase db;
     private ListView protectorList;
     private String clickProtectorPhone;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,11 +79,7 @@ public class ProtectorManage extends AppCompatActivity {
                 return true;
             }
         });
-
-
     }
-
-
 
     void showProtectorList() {
         //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
@@ -117,13 +101,11 @@ public class ProtectorManage extends AppCompatActivity {
         protectorList.setAdapter(adapter);
     }
 
-
     public void AlarmAddClick(View view) {
         Intent intent = new Intent(ProtectorManage.this, AlarmMain.class);
         startActivity(intent);
         ProtectorManage.this.finish();
     }
-
 
     public void Add_ProtectorClick(View view) {
         Intent intent = new Intent(ProtectorManage.this, ProtectorAdd.class);
@@ -145,14 +127,12 @@ public class ProtectorManage extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-
     // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
     private long backKeyPressedTime = 0;
     // 첫 번째 뒤로 가기 버튼을 누를 때 표시
     private Toast toast;
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         // 기존 뒤로 가기 버튼의 기능을 막기 위해 주석 처리 또는 삭제
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 2.5초를 더해 현재 시간과 비교 후
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 2.5초가 지났으면 Toast 출력

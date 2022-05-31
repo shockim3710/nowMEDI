@@ -1,24 +1,17 @@
 package com.example.nowmedi.history;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nowmedi.R;
-import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.mainpage.MediDetailAdapter;
 
 import java.util.ArrayList;
 
@@ -51,91 +44,16 @@ public class DosageHistoryAdapter extends RecyclerView.Adapter<DosageHistoryAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //remove(holder.getAdapterPosition());
                 String curName = holder.tv_mediname.getText().toString();
-                //Toast.makeText(v.getContext(), curName, Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(holder.itemView.getContext(), DosageDetailMain.class);
                 intent.putExtra("title",curName);
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 holder.itemView.getContext().startActivity(intent);
 
-
             }
         });
-
-//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                DBHelper helper;
-//                SQLiteDatabase db;
-//                helper = new DBHelper(view.getContext(), "newdb.db", null, 1);
-//                db = helper.getWritableDatabase();
-//                helper.onCreate(db);
-//
-//                String curName = holder.tv_mediname.getText().toString();
-//
-//
-//                AlertDialog.Builder msgBuilder = new AlertDialog.Builder(view.getContext())
-//                        .setTitle("")
-//                        .setMessage("내역을 삭제하시겠습니까?")
-//                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                //Cursor라는 그릇에 목록을 담아주기
-//                                Cursor cursor = db.rawQuery("SELECT COUNT(MEDI_NAME) FROM MEDICINE " +
-//                                        "WHERE MEDI_NAME = '" + curName + "' ", null);
-//
-//                                //리스트뷰에 목록 채워주는 도구인 adapter준비
-//                                MediDetailAdapter adapter = new MediDetailAdapter();
-//
-//                                //목록의 개수만큼 순회하여 adapter에 있는 list배열에 add
-//                                int mediCount = 0;
-//                                while (cursor.moveToNext()) {
-//                                    mediCount = cursor.getInt(0);
-//                                }
-//
-//
-//                                Toast.makeText(view.getContext(), "내역을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-//
-//                                String sql1 = "DELETE FROM  MEDI_HISTORY " +
-//                                        "WHERE HISTORY_MEDI_NAME = '" + curName + "';";
-//                                db.execSQL(sql1);
-//                                remove(holder.getAdapterPosition());
-//                                notifyItemRemoved(holder.getAdapterPosition());
-//                                notifyItemRangeRemoved(holder.getAdapterPosition(), arrayList.size());
-//
-////                                if (mediCount != 0) {
-////                                    Toast.makeText(view.getContext(), "약 알람 목록에 있으므로 삭제하지 못하였습니다.", Toast.LENGTH_SHORT).show();
-////
-////                                }
-////                                else {
-////                                    Toast.makeText(view.getContext(), "내역을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-////
-////                                    String sql1 = "DELETE FROM  MEDI_HISTORY " +
-////                                            "WHERE HISTORY_MEDI_NAME = '" + curName + "';";
-////                                    db.execSQL(sql1);
-////                                    remove(holder.getAdapterPosition());
-////                                    notifyItemRemoved(holder.getAdapterPosition());
-////                                    notifyItemRangeRemoved(holder.getAdapterPosition(), arrayList.size());
-////
-////                                }
-//                            }
-//
-//                        })
-//                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Toast.makeText(view.getContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }); AlertDialog msgDlg = msgBuilder.create();
-//                msgDlg.show();
-//
-//                return false;
-//            }
-//        });
-
-
 
     }
 
@@ -153,7 +71,6 @@ public class DosageHistoryAdapter extends RecyclerView.Adapter<DosageHistoryAdap
         }
     }
 
-
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         protected ProgressBar pb_dosage;
         protected ImageView iv_medicine;
@@ -161,9 +78,6 @@ public class DosageHistoryAdapter extends RecyclerView.Adapter<DosageHistoryAdap
         protected TextView tv_percent;
         protected TextView tv_numerator;
         protected TextView tv_denominator;
-
-
-
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);

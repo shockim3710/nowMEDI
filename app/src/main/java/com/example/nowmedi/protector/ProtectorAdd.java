@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.Editable;
+
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.mainpage.DosageList;
-import com.example.nowmedi.mainpage.MediDetail;
 
 public class ProtectorAdd extends AppCompatActivity {
 
@@ -32,7 +30,7 @@ public class ProtectorAdd extends AppCompatActivity {
 
         EditText editText = (EditText) findViewById(R.id.protector_phone);
 
-// 연락처 입력시 하이픈(-) 자동 입력
+        // 연락처 입력시 하이픈(-) 자동 입력
         editText.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         helper = new DBHelper(ProtectorAdd.this, "newdb.db", null, 1);
@@ -91,12 +89,9 @@ public class ProtectorAdd extends AppCompatActivity {
 
     }
 
-
     public void onBackPressed() {
         Intent intent = new Intent(ProtectorAdd.this, ProtectorManage.class);
         startActivity(intent);
         ProtectorAdd.this.finish();
     }
-
-
 }

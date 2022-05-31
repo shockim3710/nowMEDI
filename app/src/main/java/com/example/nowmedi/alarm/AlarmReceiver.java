@@ -26,9 +26,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-
-
-
         int id = intent.getIntExtra("id",0);
         int count = intent.getIntExtra("count",0);
         id1=id;
@@ -38,18 +35,16 @@ public class AlarmReceiver extends BroadcastReceiver {
           return;
         }
         if(count==0){
-        IS_Past_time();
+            IS_Past_time();
         }
         if(time_compare>0){
             Add_Nextday_alarm();
             return;
         }
 
-
         Intent sIntent = new Intent(context, AlarmService.class);
         sIntent.putExtra("id",id);
         sIntent.putExtra("count",count);
-
 
         // Oreo(26) 버전 이후부터는 Background 에서 실행을 금지하기 때문에 Foreground 에서 실행해야 함
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -84,8 +79,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             e.printStackTrace();
         }
         day_compare = today.compareTo(enddate);
-//        Toast.makeText(context1, "today "+ st_today +"\nendday "+ st_end_date +
-//                "\ncompare " +compare, Toast.LENGTH_LONG).show();
+
     }
     public void IS_Past_time(){
 
@@ -110,15 +104,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         today_minute = Integer.parseInt(st_today_time.substring(idx+1));
 
         if(today_hour>hour){
-            Toast.makeText(context1, "현제 시간이 더큽니다.\n"+"현제 시간="+today_hour+":"+today_minute+
-                    "등록된 시간=" +hour+":"+minute +"id="+id1, Toast.LENGTH_LONG).show();
+            Toast.makeText(context1, "다음날부터 약 알람이 실행됩니다.", Toast.LENGTH_LONG).show();
 
             time_compare=1;
 
         }
         else if(today_minute>minute){
-            Toast.makeText(context1, "현제 시간이 더큽니다.\n"+"현제 시간="+today_hour+":"+today_minute+
-                    "등록된 시간=" +hour+":"+minute +"id="+id1, Toast.LENGTH_LONG).show();
+            Toast.makeText(context1, "다음날부터 약 알람이 실행됩니다.", Toast.LENGTH_LONG).show();
+
             time_compare=1;
 
         }
@@ -148,15 +141,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent repeat_intent = new Intent(context1, AlarmReceiver.class);
         repeat_intent.putExtra("id", id1);
         repeat_intent.putExtra("count",count);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context1, id1, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context1, id1, repeat_intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         AlarmManager alarmManager = (AlarmManager) context1.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
     }
-
-
-
-
 
 }

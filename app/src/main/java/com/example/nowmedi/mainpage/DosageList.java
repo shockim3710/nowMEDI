@@ -1,9 +1,7 @@
 package com.example.nowmedi.mainpage;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -16,13 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.nowmedi.R;
-import com.example.nowmedi.alarm.AlarmGo;
 import com.example.nowmedi.alarm.AlarmMain;
 import com.example.nowmedi.database.DBHelper;
 import com.example.nowmedi.history.DosageHistoryMain;
@@ -39,8 +33,6 @@ public class DosageList extends AppCompatActivity {
     private ListView morningList;
     private ListView lunchList;
     private ListView dinnerList;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +64,6 @@ public class DosageList extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             requestPermissions(
                     new String[]{
@@ -81,8 +71,6 @@ public class DosageList extends AppCompatActivity {
                             Manifest.permission.BLUETOOTH_SCAN,
                             Manifest.permission.BLUETOOTH_ADVERTISE,
                             Manifest.permission.BLUETOOTH_CONNECT
-
-
                     },
                     1);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -93,10 +81,6 @@ public class DosageList extends AppCompatActivity {
                     },
                     1);
         }
-
-
-
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
@@ -109,25 +93,12 @@ public class DosageList extends AppCompatActivity {
             }
         }
 
-
-
-
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&!Settings.canDrawOverlays(this)){
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+getPackageName()));
             startActivity(intent);
         }
 
-
-
-
-
-
-
-
-
-
     }
-
 
     void dosageMorningList() throws ParseException {
         //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
@@ -233,8 +204,6 @@ public class DosageList extends AppCompatActivity {
         dinnerList.setAdapter(adapter);
     }
 
-
-
     // 오늘이 복용기간내에 있는지 판별
     boolean PeriodDateCalculate(String start_dt, String end_dt) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
@@ -257,44 +226,11 @@ public class DosageList extends AppCompatActivity {
         return result;
     }
 
-
-
     public void AlarmAddClick(View view) {
         Intent intent = new Intent(DosageList.this, AlarmMain.class);
         startActivity(intent);
         DosageList.this.finish();
-
-//        String name = "삭제할 약";
-//        String product = "테스트zzzz";
-//        String memo = "주의해야한다ㅋㅋㅋ";
-//        String startdate = "2022.04.01";
-//        String enddate = "2022.09.09";
-//
-//        String routine = "아침약";
-//        String time = "09:00";
-//
-//        String name1 = "홍길동";
-//        String num = "01011112222";
-//        String msg = "약을 복용하지 않았습니다. 확인해주세요";
-
-//        db.execSQL("INSERT INTO PROTECTOR" +
-//                "(PROTECTOR_NAME, PROTECTOR_PHONE_NUM, PROTECTOR_MESSAGE) " +
-//                "VALUES ('" + name1 + "', '" + num + "', '" + msg + "');");
-
-//        db.execSQL("INSERT INTO MEDICINE" +
-//                "(MEDI_NAME, MEDI_PRODUCT, MEDI_MEMO, " +
-//                "MEDI_START_DATE, MEDI_END_DATE) " +
-//                "VALUES ('" + name + "', '" + product + "', '" + memo + "', " +
-//                "'" + startdate + "', '" + enddate + "');");
-//
-//        db.execSQL("INSERT INTO MEDI_ALARM" +
-//                "(ALARM_MEDI_NAME, ALARM_ROUTINE, ALARM_TIME) " +
-//                "VALUES ('" + name + "', '" + routine + "', '" + time + "');");
-//
-//        Toast.makeText(getApplicationContext(), "추가 성공", Toast.LENGTH_SHORT).show();
-
     }
-
 
     public void CalendarClick(View view) {
         Intent intent = new Intent(DosageList.this, DosageCalendarList.class);
@@ -317,15 +253,12 @@ public class DosageList extends AppCompatActivity {
         overridePendingTransition(0, 0); //애니메이션 없애기
     }
 
-
-
     // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
     private long backKeyPressedTime = 0;
     // 첫 번째 뒤로 가기 버튼을 누를 때 표시
     private Toast toast;
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         // 기존 뒤로 가기 버튼의 기능을 막기 위해 주석 처리 또는 삭제
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 2.5초를 더해 현재 시간과 비교 후
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 2.5초가 지났으면 Toast 출력

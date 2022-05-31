@@ -23,7 +23,6 @@ public class AddTimePop extends AppCompatActivity {
     String Daytime="아침약";
     ImageButton ib_morning,ib_afternoon,ib_night;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +33,6 @@ public class AddTimePop extends AppCompatActivity {
         ib_night=(ImageButton)findViewById(R.id.ib_night);
         ib_morning.setBackgroundColor(Color.parseColor("#2C7ABD"));
 
-
-        //변경 사항
         Date today= new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("mm");
@@ -76,8 +73,8 @@ public class AddTimePop extends AppCompatActivity {
     }
 
     public void mOnAfternoon(View v){
-
         Daytime="점심약";
+
         ib_morning.setBackgroundColor(Color.parseColor("#EDF4FC"));
         ib_afternoon.setBackgroundColor(Color.parseColor("#2C7ABD"));
         ib_night.setBackgroundColor(Color.parseColor("#EDF4FC"));
@@ -85,17 +82,12 @@ public class AddTimePop extends AppCompatActivity {
     }
 
     public void mOnNight(View v){
-
         Daytime="저녁약";
+
         ib_morning.setBackgroundColor(Color.parseColor("#EDF4FC"));
         ib_afternoon.setBackgroundColor(Color.parseColor("#EDF4FC"));
         ib_night.setBackgroundColor(Color.parseColor("#2C7ABD"));
-
     }
-
-
-
-
 
     //확인 버튼 클릭
     public void mOnClose(View v){

@@ -28,17 +28,8 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //테스트 코드
         int id = intent.getIntExtra("id",0);
         int count = intent.getIntExtra("count",0);
-//        Calendar calendar =  Calendar.getInstance();
-//        calendar.add(Calendar.MINUTE,1);
-//        Toast.makeText(this, "서비스에서 받은 id 값은: "+ String.valueOf(id), Toast.LENGTH_LONG).show();
-//        Intent intent_daily_alarm = new Intent(this, AlarmReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent_daily_alarm, PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pendingIntent);
-
 
         // Foreground 에서 실행되면 Notification 을 보여줘야 됨
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -48,12 +39,10 @@ public class AlarmService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
             Notification notification = builder.setOngoing(true)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    //.setCategory(Notification.CATEGORY_SERVICE)
                     .build();
 
             startForeground(1, notification);
         }
-
 
         // 알람창 호출
         Intent intent1 = new Intent(this, AlarmGo.class);
@@ -79,7 +68,7 @@ public class AlarmService extends Service {
         String channelId = "Alarm";
         String channelName = getString(R.string.app_name);
         NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
-        //channel.setDescription(channelName);
+
         channel.setSound(null, null);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

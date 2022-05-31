@@ -1,28 +1,18 @@
 package com.example.nowmedi.mainpage;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.nowmedi.R;
 import com.example.nowmedi.alarm.AlarmMain;
@@ -35,8 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DosageCalendarList extends AppCompatActivity {
-
-//    ImageButton sendSMSBt;
 
     private CalendarView calendarView;
 
@@ -56,13 +44,8 @@ public class DosageCalendarList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dosage_calendar_list);
-//        sendSMSBt = findViewById(R.id.send_sms_button);
-
-
 
         final TextView textView1 = findViewById(R.id.select_date);
-
-        System.out.println("clickDate = " + clickDate);
 
         CalendarView calendarView = findViewById(R.id.calendarView);
 
@@ -85,8 +68,6 @@ public class DosageCalendarList extends AppCompatActivity {
             }
         });
 
-
-
         calendarList = (ListView)findViewById(R.id.select_listview);
 
         try {
@@ -98,27 +79,7 @@ public class DosageCalendarList extends AppCompatActivity {
         helper = new DBHelper(DosageCalendarList.this, "newdb.db", null, 1);
         db = helper.getWritableDatabase();
         helper.onCreate(db);
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
 
     void dosageCalendarList() throws ParseException {
         //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
@@ -174,24 +135,6 @@ public class DosageCalendarList extends AppCompatActivity {
         return result;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void ListClick(View view) {
         Intent intent = new Intent(DosageCalendarList.this, DosageList.class);
         startActivity(intent);
@@ -199,38 +142,12 @@ public class DosageCalendarList extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void AlarmAddClick(View view) {
         Intent intent = new Intent(DosageCalendarList.this, AlarmMain.class);
         startActivity(intent);
         DosageCalendarList.this.finish();
 
     }
-
-
-
-
-
-
-
 
     public void DosageHistoryClick(View view) {
         Intent intent = new Intent(DosageCalendarList.this, DosageHistoryMain.class);
@@ -246,17 +163,12 @@ public class DosageCalendarList extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-
-
-
-
     // 마지막으로 뒤로 가기 버튼을 눌렀던 시간 저장
     private long backKeyPressedTime = 0;
     // 첫 번째 뒤로 가기 버튼을 누를 때 표시
     private Toast toast;
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         // 기존 뒤로 가기 버튼의 기능을 막기 위해 주석 처리 또는 삭제
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간에 2.5초를 더해 현재 시간과 비교 후
         // 마지막으로 뒤로 가기 버튼을 눌렀던 시간이 2.5초가 지났으면 Toast 출력
@@ -273,7 +185,5 @@ public class DosageCalendarList extends AppCompatActivity {
         toast.cancel();
 
     }
-
-
 
 }

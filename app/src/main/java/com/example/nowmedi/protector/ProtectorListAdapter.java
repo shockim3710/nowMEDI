@@ -1,24 +1,13 @@
 package com.example.nowmedi.protector;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
 
 import com.example.nowmedi.R;
-import com.example.nowmedi.database.DBHelper;
-import com.example.nowmedi.mainpage.MediDetail;
 
 import java.util.ArrayList;
 

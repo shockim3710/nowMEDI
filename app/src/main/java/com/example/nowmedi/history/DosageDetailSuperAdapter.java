@@ -43,7 +43,7 @@ public class DosageDetailSuperAdapter  extends RecyclerView.Adapter<DosageDetail
         );
         layoutManager.setInitialPrefetchItemCount(dosageDetailSuper.getSubItemList().size());
 
-        // 자식 어답터 설정
+        // 자식 어뎁터 설정
         DosageDetailSubAdapter dosageDetailSubAdapter = new DosageDetailSubAdapter(dosageDetailSuper.getSubItemList());
 
         holder.rv_sub_detail.setLayoutManager(layoutManager);

@@ -60,8 +60,6 @@ public class MediDetail extends AppCompatActivity {
         showMediDetail();
     }
 
-
-
     void mediDetailAlarmList(){
         //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
         helper = new DBHelper(MediDetail.this, "newdb.db", null, 1);
@@ -81,11 +79,8 @@ public class MediDetail extends AppCompatActivity {
 
         //리스트뷰의 어댑터 대상을 여태 설계한 adapter로 설정
         AlarmList.setAdapter(adapter);
-//        setListViewHeightBasedOnChildren(AlarmList);
 
     }
-
-
 
     void showMediDetail() {
         //Dbhelper의 읽기모드 객체를 가져와 SQLiteDatabase에 담아 사용준비
@@ -105,7 +100,6 @@ public class MediDetail extends AppCompatActivity {
         }
 
     }
-
 
     void showDialog() {
         AlertDialog.Builder msgBuilder = new AlertDialog.Builder(MediDetail.this)
@@ -131,11 +125,10 @@ public class MediDetail extends AppCompatActivity {
                                     getApplicationContext(), id, myIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
 
                             alarmManager.cancel(pendingIntent);
-                            System.out.println("삭제한약 id"+id);
                         }
 
                         db = helper.getWritableDatabase();
-                        Toast.makeText(MediDetail.this, "약을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MediDetail.this, "약 알람을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
 
                         String sql1 = "DELETE FROM MEDICINE " +
@@ -161,7 +154,6 @@ public class MediDetail extends AppCompatActivity {
         showDialog();
     }
 
-
     public void MediModifyClick(View view) {
         Intent intent = new Intent(MediDetail.this, MediDetailModify.class);
         intent.putExtra("mediName", clickMediName);
@@ -181,34 +173,4 @@ public class MediDetail extends AppCompatActivity {
         startActivity(intent);
         MediDetail.this.finish();
     }
-
-
-
-
-
-//    public static void setListViewHeightBasedOnChildren(ListView listView) {
-//        ListAdapter listAdapter = listView.getAdapter();
-//        if (listAdapter == null) {
-//            // pre-condition
-//            return;
-//        }
-//
-//        int totalHeight = 0;
-//        int dividerHeight = listView.getDividerHeight();
-//        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
-//
-//        for (int i = 0; i < listAdapter.getCount(); i++) {
-//            View listItem = listAdapter.getView(i, null, listView);
-//            //listItem.measure(0, 0);
-//            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-//            totalHeight += listItem.getMeasuredHeight() + dividerHeight;
-//        }
-//        ViewGroup.LayoutParams params = listView.getLayoutParams();
-//
-//        params.height = totalHeight;
-//        listView.setLayoutParams(params);
-//
-//        listView.requestLayout();
-//    }
-
 }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.example.nowmedi.database.DBHelper;
 
@@ -24,8 +23,6 @@ public class BootCompleteRecevier extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            // Set the alarm here.
-
 
             helper = new DBHelper(context, "newdb.db", null, 1);
             db = helper.getWritableDatabase();
@@ -50,7 +47,6 @@ public class BootCompleteRecevier extends BroadcastReceiver {
                 st_sday=cursor.getString(4);
                 st_eday=cursor.getString(5);
                 mediname=cursor.getString(1);
-                System.out.println("약이름은"+mediname+" 오늘은"+ st_today+" 시작일은"+st_sday+" 종료일"+st_eday);
 
                 try {
                     today = format_ymd.parse(st_today);
@@ -59,15 +55,13 @@ public class BootCompleteRecevier extends BroadcastReceiver {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                compare1 = today.compareTo(sday);//sday1이 eday2보다 크면-(compare=0보다 크면 ok)
-                compare2 = today.compareTo(eday);//compare2가 0보다 작으면 ok
+                compare1 = today.compareTo(sday); //sday1이 eday2보다 크면-(compare=0보다 크면 ok)
+                compare2 = today.compareTo(eday); //compare2가 0보다 작으면 ok
                 if(compare1>=0 && compare2<=0){
                     medi_name_list.add(mediname);
-//                System.out.println("추가된약은"+mediname);
                 }
             }
             cursor.close();
-
 
             for(int i =0; i<medi_name_list.size();i++) {
                 String mediname=medi_name_list.get(i);
@@ -77,7 +71,6 @@ public class BootCompleteRecevier extends BroadcastReceiver {
                     int id=cursor.getInt(0);
                     String time=cursor.getString(3);
 
-                    System.out.println("알람에 추가할약은"+mediname+" id는"+id+"시간은"+time);
                     int idx = time.indexOf(":");
                     int hour1= Integer.parseInt(time.substring(0,idx));
                     int minute1 = Integer.parseInt(time.substring(idx+1));
@@ -98,8 +91,6 @@ public class BootCompleteRecevier extends BroadcastReceiver {
             cursor.close();
             helper.close();
             db.close();
-
-            Toast.makeText(context, "약알람 등록 완료", Toast.LENGTH_SHORT).show();
 
         }
     }

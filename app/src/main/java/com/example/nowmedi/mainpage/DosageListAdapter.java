@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nowmedi.R;
 
@@ -56,7 +55,6 @@ public class DosageListAdapter extends BaseAdapter {
         //가져온 객체안에 있는 글자들을 각 뷰에 적용한다
         mediName.setText(listdata.getMedi_name());
         mediAlarm.setText(listdata.getMedi_alarm());
-
 
         LinearLayout cmdArea= (LinearLayout)view.findViewById(R.id.medi_choice);
         cmdArea.setOnClickListener(new View.OnClickListener() {

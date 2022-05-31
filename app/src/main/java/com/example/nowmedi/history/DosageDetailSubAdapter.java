@@ -49,7 +49,6 @@ public class DosageDetailSubAdapter extends RecyclerView.Adapter<DosageDetailSub
         private TextView tv_minute_detail;
         private TextView tv_dosage_detail;
 
-
         SubItemViewHolder(View itemView) {
             super(itemView);
             iv_daytime = itemView.findViewById(R.id.iv_daytime_detail);
@@ -59,6 +58,5 @@ public class DosageDetailSubAdapter extends RecyclerView.Adapter<DosageDetailSub
             tv_dosage_detail = itemView.findViewById(R.id.tv_dosage_detail);
         }
     }
-
 
 }
