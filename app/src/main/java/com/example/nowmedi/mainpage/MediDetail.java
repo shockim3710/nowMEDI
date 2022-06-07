@@ -130,15 +130,18 @@ public class MediDetail extends AppCompatActivity {
                         db = helper.getWritableDatabase();
                         Toast.makeText(MediDetail.this, "약 알람을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
 
-
                         String sql1 = "DELETE FROM MEDICINE " +
                                 "WHERE MEDI_NAME = '" + clickMediName + "';";
 
                         String sql2 = "DELETE FROM MEDI_ALARM " +
                                 "WHERE ALARM_MEDI_NAME = '" + clickMediName + "';";
 
+                        String sql3 = "DELETE FROM MEDI_HISTORY " +
+                                "WHERE HISTORY_MEDI_NAME = '" + clickMediName + "';";
+
                         db.execSQL(sql1);
                         db.execSQL(sql2);
+                        db.execSQL(sql3);
                     }
                 })
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {

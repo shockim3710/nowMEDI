@@ -27,7 +27,7 @@ public class AddTimePop extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_time_pop);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         ib_morning=(ImageButton)findViewById(R.id.ib_morning);
         ib_afternoon=(ImageButton)findViewById(R.id.ib_afternoon);
         ib_night=(ImageButton)findViewById(R.id.ib_night);

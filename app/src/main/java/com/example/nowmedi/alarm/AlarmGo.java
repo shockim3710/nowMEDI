@@ -50,6 +50,7 @@ public class AlarmGo extends AppCompatActivity{
 
     private MediaPlayer mediaPlayer;
     int id,count,routine;
+    private boolean is_clicked= false, isnot_clcicked=true;
     private DBHelper helper;
     private SQLiteDatabase db;
     private TextView tv_alarm_count,tv_alarm_message,tv_alarm_day,tv_alarm_ampm,tv_alarm_time;
@@ -81,10 +82,10 @@ public class AlarmGo extends AppCompatActivity{
         create_screen();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if(count<2) {
+        if(count<3) {
             count++;
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MINUTE, 1);
+            calendar.add(Calendar.MINUTE, 5);
             calendar.set(Calendar.SECOND,0);
             Intent repeat_intent = new Intent(this, AlarmReceiver.class);
             repeat_intent.putExtra("id", id);
@@ -99,7 +100,7 @@ public class AlarmGo extends AppCompatActivity{
             AudioManager audio = null;
             audio = (AudioManager) getSystemService(this.AUDIO_SERVICE);
             audio.setStreamVolume(AudioManager.STREAM_MUSIC,
-                    (int)(audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 1), // 10씩 늘림, 알람볼륨조절
+                    (int)(audio.getStreamVolume(AudioManager.STREAM_MUSIC) + 5), // 10씩 늘림, 알람볼륨조절
                     0);
 
             // 알람음 재생
@@ -402,15 +403,12 @@ public class AlarmGo extends AppCompatActivity{
                                 readMessage = new String(readBuf, 0, msg.arg1);
 
                                 mThreadConnectedBluetooth.write("0");
-
+                                is_clicked=true;
                                 Add_Nextday_alarm(); //다음날 알람 추가
-
-                                if (mediaPlayer.isPlaying()) { //소리 끄기
-                                    mediaPlayer.stop();
-                                    mediaPlayer.release();
-                                    mediaPlayer = null;
+                                if(is_clicked==true&&isnot_clcicked==true) {
+                                    IS_CLICKED(); //내역 저장
                                 }
-                                IS_CLICKED(); //내역 저장
+                                isnot_clcicked=false;
                                 finishAndRemoveTask(); //종료
                             }
                         }

@@ -130,6 +130,7 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:hint="@string/protector_name"
+                android:maxLength="10"
                 android:id="@+id/protector_name" />
 
             <View
@@ -240,6 +241,7 @@
                 android:layout_weight="10"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:maxLength="35"
                 android:hint="약을 복용하지 않았습니다. 확인 부탁합니다."
                 android:id="@+id/protector_msg" />
 

@@ -143,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:autofillHints="medicine_name"
                         android:layout_weight="6"
+                        android:maxLength="8"
                         android:ems="6"
                         android:hint="@string/hint_medicine_name"
                         android:inputType="textPersonName"
@@ -400,6 +401,7 @@
                         android:ems="6"
                         android:autofillHints="medicine_name_detail"
                         android:hint="@string/medi_product_detail"
+                        android:maxLength="50"
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
                         android:textColorHint="#757575"
@@ -479,6 +481,7 @@
                         android:ems="6"
                         android:gravity="bottom"
                         android:hint="@string/medi_memo_detail"
+                        android:maxLength="50"
                         android:inputType="textMultiLine"
                         />
                     <View

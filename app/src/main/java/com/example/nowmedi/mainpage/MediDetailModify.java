@@ -559,7 +559,7 @@ public class MediDetailModify extends AppCompatActivity {
                     if(!Alarm_medi_name.contains(duplicated_alarm_name)){
                         Alarm_medi_name.add(duplicated_alarm_name);
                     }
-                    Toast.makeText(this, "선택한 시간은"+Alarm_medi_name.get(Alarm_medi_name.size()-1)+"약 알람시간"+time+"과 겹칠 수 있습니다. 다른시간을 선택하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "선택한 시간은 "+Alarm_medi_name.get(Alarm_medi_name.size()-1)+" 알람시간 "+time+"과 겹칠 수 있습니다. 다른시간을 선택하세요.", Toast.LENGTH_SHORT).show();
                     is_duplicated = true;
                 }
                 calendar.add(Calendar.MINUTE,1);

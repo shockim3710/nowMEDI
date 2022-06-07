@@ -341,7 +341,7 @@ public class AlarmMain extends AppCompatActivity {
                     compare=calendar.compareTo(calendar2);
                     if (compare == 0) {
                         time2 = hh_mmformat.format(calendar2.getTime());
-                        Toast.makeText(this, "등록하고자 하는 시간" + time1 + "이 " + time2 + "와 중첩됩니다. ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "등록하고자 하는 시간 " + time1 + "이 " + time2 + "와 중첩됩니다.", Toast.LENGTH_SHORT).show();
                         is_duplicated = true;
                     }
                     calendar.add(Calendar.MINUTE,1);
@@ -354,7 +354,7 @@ public class AlarmMain extends AppCompatActivity {
                     compare=calendar.compareTo(calendar2);
                     if (compare == 0) {
                         time2 = hh_mmformat.format(calendar2.getTime());
-                        Toast.makeText(this, "등록하고자 하는 시간" + time1 + "이 " + time2 + "와 중첩됩니다. ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "등록하고자 하는 시간 " + time1 + "이 " + time2 + "와 중첩됩니다.", Toast.LENGTH_SHORT).show();
                         is_duplicated = true;
                     }
                     calendar.add(Calendar.MINUTE,-1);
@@ -423,7 +423,7 @@ public class AlarmMain extends AppCompatActivity {
                     if(!Alarm_medi_name.contains(duplicated_alarm_name)){
                         Alarm_medi_name.add(duplicated_alarm_name);
                     }
-                    Toast.makeText(this, "선택한 시간은"+Alarm_medi_name.get(Alarm_medi_name.size()-1)+"약 알람시간"+time+"과 겹칠 수 있습니다. 다른시간을 선택하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "선택한 시간은 "+Alarm_medi_name.get(Alarm_medi_name.size()-1) + " " + time + " 겹칩니다.", Toast.LENGTH_SHORT).show();
                     is_duplicated = true;
                 }
                 calendar.add(Calendar.MINUTE,1);
@@ -449,7 +449,7 @@ public class AlarmMain extends AppCompatActivity {
                     if (!Alarm_medi_name.contains(duplicated_alarm_name)) {
                         Alarm_medi_name.add(duplicated_alarm_name);
                     }
-                    Toast.makeText(this, "선택한 시간은" + Alarm_medi_name.get(Alarm_medi_name.size() - 1) + "약 알람시간" + time + "과 겹칠 수 있습니다. 다른시간을 선택하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "선택한 시간은 " + Alarm_medi_name.get(Alarm_medi_name.size() - 1) + " " + time + " 겹칩니다.", Toast.LENGTH_SHORT).show();
                     is_duplicated = true;
                 }
                 calendar.add(Calendar.MINUTE, -1);

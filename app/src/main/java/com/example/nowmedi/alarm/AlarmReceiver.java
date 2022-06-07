@@ -104,14 +104,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         today_minute = Integer.parseInt(st_today_time.substring(idx+1));
 
         if(today_hour>hour){
-            Toast.makeText(context1, "다음날부터 약 알람이 실행됩니다.", Toast.LENGTH_LONG).show();
-
             time_compare=1;
 
         }
         else if(today_minute>minute){
-            Toast.makeText(context1, "다음날부터 약 알람이 실행됩니다.", Toast.LENGTH_LONG).show();
-
             time_compare=1;
 
         }
