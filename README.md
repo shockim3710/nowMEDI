@@ -84,4 +84,9 @@
 <img src="https://img.shields.io/badge/Language-Java|C++-green?style=flat"/>  
 
 
-* 구현 영상  
+* 메디슨 박스 연결부터 복용까지 구현 영상  
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/D2fI3xB3ucE/0.jpg)](http://www.youtube.com/watch?v=D2fI3xB3ucE)  
+
+
+* 미복용 시 구현 영상  
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/ITHQxqA9Xog/0.jpg)](http://www.youtube.com/watch?v=ITHQxqA9Xog)  
