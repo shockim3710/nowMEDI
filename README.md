@@ -81,7 +81,7 @@
 
 
 ## About Project
-<img src="https://img.shields.io/badge/Language-Java|C++-green?style=flat"/>  
+<img src="https://img.shields.io/badge/Language-Java | C++-green?style=flat"/>  
 
 
 * 메디슨 박스 연결부터 복용까지 구현 영상  
